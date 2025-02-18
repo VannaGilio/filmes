@@ -7,13 +7,16 @@
 
 //Funcão para tratar a inserção de um novo filme no DAO
 const inserirFilme = async function (){
-    if(filme.nome == '' || filme.nome == undefined || filme.nome == null || filme.nome.length > 80 || 
-        filme.nome == '' || filme.nome == undefined || filme.nome == null || filme.duracao.length > 5 || 
-        filme.sinopse == '' || filme.sinopse == undefined|| filme.sinopse == null ||
-        filme.data_lancamento == '' || filme.data_lancamento == undefined || filme.data_lancamento == null || filme.data_lancamento.length > 10 ||
-        filme.foto_capa.length > 200 || filme.foto_capa == undefined ||
-        filme.link_trailer.length > 200 || filme.link_trailer == undefined
-    ) 
+    if(filme.nome                  == '' || filme.nome             == undefined || filme.nome             == null || filme.nome.length             > 80 || 
+        filme.nome                 == '' || filme.nome             == undefined || filme.nome             == null || filme.duracao.length          > 5  || 
+        filme.sinopse              == '' || filme.sinopse          == undefined || filme.sinopse          == null ||
+        filme.data_lancamento      == '' || filme.data_lancamento  == undefined || filme.data_lancamento  == null || filme.data_lancamento.length  > 10 ||
+        filme.foto_capa.length     > 200 || filme.foto_capa        == undefined ||
+        filme.link_trailer.length  > 200 || filme.link_trailer     == undefined
+    ){
+        response.status_code = 400
+        response.message = 'Os atributos informados na requisição não estão de acordo'
+    }
 }
 //Funcão para tratar a atualização de um novo filme no DAO
 const atualizarFilme = async function (){
