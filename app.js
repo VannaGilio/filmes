@@ -12,3 +12,10 @@
  *          * prisma/client     npm install @prisma/client --save   (para rodar os scripts SQL)
 */
 
+const express = require ('express')
+const cors = require ('cors')
+const bodyParser = require ('body-parser')
+
+const app = express()
+
+

@@ -5,6 +5,11 @@
  * Versão: 1.0
 ************************************************************************************/
 
+//Import do arquivo dee mensagens e status code do projeto
+const message = require('../../modulo/config')
+
+const filmeDAO = require('../../model/DAO/filme')
+
 //Funcão para tratar a inserção de um novo filme no DAO
 const inserirFilme = async function (){
     if(filme.nome                  == '' || filme.nome             == undefined || filme.nome             == null || filme.nome.length             > 80 || 
@@ -13,9 +18,17 @@ const inserirFilme = async function (){
         filme.data_lancamento      == '' || filme.data_lancamento  == undefined || filme.data_lancamento  == null || filme.data_lancamento.length  > 10 ||
         filme.foto_capa.length     > 200 || filme.foto_capa        == undefined ||
         filme.link_trailer.length  > 200 || filme.link_trailer     == undefined
-    ){
-        response.status_code = 400
-        response.message = 'Os atributos informados na requisição não estão de acordo'
+    )
+    {
+        return message.ERROR_REQUIRED_FIELDS //400
+    }else{
+        //Chama a função para inserir no BD e aguarda o retorno da função
+        let resultFilme = await filmeDAO.insertFilme(filme)
+
+        if(resultFilme){
+            return message.SUCCESS_CREATED_ITEM //201
+        }else
+        return message.ERROR_INTERNAL_SERVER //500
     }
 }
 //Funcão para tratar a atualização de um novo filme no DAO
@@ -36,4 +49,14 @@ const listarFilme = async function (){
 //Funcão para tratar o retorno de um filme filtrando pelo id do DAO
 const buscarFilme = async function (){
     
+}
+
+module.exports = {
+    inserirFilme,
+    atualizarFilme,
+    excluirFilme,
+    atualizarFilme,
+    excluirFilme,
+    listarFilme,
+    buscarFilme
 }
