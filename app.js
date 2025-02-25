@@ -42,10 +42,14 @@ app.use((request, response, next)=>{
 const controllerFilme = require('./controller/filme/controllerFilme')
 
 app.post('/v1/controle-filmes/filme', cors(), bodyParserJSON, async function(request, response) {
+
+    //Recebe o content type da requisição
+    let contentType = request.headers['content-type']
+
     //Recebe do body da requisição os dados encaminhados
     let dadosBody = request.body   
 
-    let resultFilme = await controllerFilme.inserirFilme(dadosBody)
+    let resultFilme = await controllerFilme.inserirFilme(dadosBody, contentType)
 
     response.status(resultFilme.status_code)
     response.json(resultFilme)
