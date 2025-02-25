@@ -11,7 +11,7 @@ const message = require('../../modulo/config')
 const filmeDAO = require('../../model/DAO/filme')
 
 //Funcão para tratar a inserção de um novo filme no DAO
-const inserirFilme = async function (){
+const inserirFilme = async function (filme){
     if(filme.nome                  == '' || filme.nome             == undefined || filme.nome             == null || filme.nome.length             > 80 || 
         filme.nome                 == '' || filme.nome             == undefined || filme.nome             == null || filme.duracao.length          > 5  || 
         filme.sinopse              == '' || filme.sinopse          == undefined || filme.sinopse          == null ||

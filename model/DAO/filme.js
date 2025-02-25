@@ -10,6 +10,8 @@ const {PrismaClient} = require('@prisma/client')
 
 //INSERT DO NOVO FILME
 const insertFilme = async function(filme){
+    try{
+
     //Instancia (criarr um objt a ser utilizado) a biblioteca do prisma/client
     const prisma = new PrismaClient()
 
@@ -22,12 +24,12 @@ const insertFilme = async function(filme){
                                         link_trailer
                                     )
                                     values(
-                                        ${filme.nome},
-                                        ${filme.duracao},
-                                        ${filme.sinopse},
-                                        ${filme.data_lancamento},
-                                        ${filme.foto_capa},
-                                        ${filme.link_trailer}
+                                        '${filme.nome}',
+                                        '${filme.duracao}',
+                                        '${filme.sinopse}',
+                                        '${filme.data_lancamento}',
+                                        '${filme.foto_capa}',
+                                        '${filme.link_trailer}'
                                     )`
 
     // Executa o scriptSQL no BD e aguarda o retorno no mesmo para saber se deu certo
@@ -37,6 +39,9 @@ const insertFilme = async function(filme){
         return true
     else
         return false
+    }catch(error){
+        return false
+    }
 }
 
 //ATUALIZAR UM FILME EXISTENTE

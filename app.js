@@ -51,6 +51,6 @@ app.post('/v1/controle-filmes/filme', cors(), bodyParserJSON, async function(req
     response.json(resultFilme)
 })
 
-app.listen('8080', function(){
+app.listen('3030', function(){
     console.log('API funcionando...')
 })
