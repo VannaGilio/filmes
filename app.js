@@ -55,6 +55,14 @@ app.post('/v1/controle-filmes/filme', cors(), bodyParserJSON, async function(req
     response.json(resultFilme)
 })
 
+app.get('/v1/controle-filmes/filme', cors(), async function(request, response){
+    //Chama a função para retornar os filmes
+    let resultFilme = await controllerFilme.listarFilme()
+
+    response.status(resultFilme.status_code)
+    response.json(resultFilme)
+})
+
 app.listen('3030', function(){
     console.log('API funcionando...')
 })

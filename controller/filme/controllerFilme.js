@@ -54,7 +54,32 @@ const excluirFilme = async function (){
 
 //Funcão para tratar o retorno de filmes do DAO
 const listarFilme = async function (){
-    
+    try {
+
+        //Onjeto do tipo JSON
+        let dadosFilme = {}
+
+        //Chama a função para retornar os filmes cadastrados
+        let resultFilme = await filmeDAO.selectAllFilme()
+        
+        if(resultFilme != false){
+            if(resultFilme.length > 0){
+                //Criando um JSON de retorno de dados para a API
+                dadosFilme.status = true
+                dadosFilme.status_code = 200
+                dadosFilme.items = resultFilme.length
+                dadosFilme.films = resultFilme
+
+                return dadosFilme
+            }else{
+                return message.ERROR_NOT_FOUND //404
+            }
+        }else{
+            return message.ERROR_INTERNAL_SERVER_MODEL //500
+        }
+    } catch (error) {
+        return message.ERROR_INTERNAL_SERVER_CONTROLLER //500
+    }
 }
 
 //Funcão para tratar o retorno de um filme filtrando pelo id do DAO

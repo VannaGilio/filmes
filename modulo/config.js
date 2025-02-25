@@ -11,7 +11,7 @@ const ERROR_INTERNAL_SERVER = {status: false, status_code: 500, message: "Devido
 const ERROR_INTERNAL_SERVER_MODEL = {status: false, status_code: 500, message: "Devido a erros internos no servidor da MODEL, não foi possivel processar a requisição!!!"}
 const ERROR_INTERNAL_SERVER_CONTROLLER = {status: false, status_code: 500, message: "Devido a erros internos no servidor da CONTROLLER, não foi possivel processar a requisição!!!"}
 const ERROR_CONTENT_TYPE = {staus: false, status_code: 415, message: "Não foi possivel processar a requisição, pois, o tipo de dado encaminhado não é processado pelo servidor. Favor encaminhar dados apenas no formato JSON"}
-
+const ERROR_NOT_FOUND = {status: false, status_code: 404, message: "Não foram encontrados itens de retorno"}
 //Status code de mensagens de sucesso
 const SUCCESS_CREATED_ITEM = {status: true, status_code: 201, message: "Item criado com sucesso!!!"}
 
@@ -21,5 +21,6 @@ module.exports = {
     SUCCESS_CREATED_ITEM,
     ERROR_INTERNAL_SERVER_CONTROLLER,
     ERROR_INTERNAL_SERVER_MODEL,
-    ERROR_CONTENT_TYPE      
+    ERROR_CONTENT_TYPE,
+    ERROR_NOT_FOUND   
 }
