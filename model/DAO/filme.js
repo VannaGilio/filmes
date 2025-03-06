@@ -73,7 +73,12 @@ const selectAllFilme = async function(){
 
 //BUSCAR UM FILME PELO ID
 const selectByIdFilme = async function(){
-
+    try {
+        let sql = 'select'
+        
+    } catch (error) {
+        
+    }
 }
 
 module.exports = {
