@@ -48,8 +48,37 @@ const atualizarFilme = async function (){
 }
 
 //Funcão para tratar a excluir de um novo filme no DAO
-const excluirFilme = async function (){
-    
+const excluirFilme = async function (idFilme){
+    try {
+        if(idFilme == '' || idFilme == undefined || idFilme == null || isNaN(idFilme) || idFilme <= 0){
+            return message.ERROR_REQUIRED_FIELDS //400
+        }else{
+
+            //função que verifica se ID existe no BD
+            let resultFilme = await filmeDAO.selectByIdFilme(parseInt(idFilme))
+
+            if(resultFilme != false || typeof(resultFilme) == 'object'){
+                //se exestir, faremos o delete
+                if(resultFilme.length > 0){
+                    //delete    
+                    let result = await filmeDAO.deleteFilme(parseInt(idFilme))
+
+                    if(result){
+                        return message.SUCCESS_DELETED_ITEM
+                    }else{
+                        return message.ERROR_INTERNAL_SERVER_MODEL
+                    }
+                }else{
+                    return message.ERROR_NOT_FOUND
+                }
+                
+            }else{
+                return message.ERROR_INTERNAL_SERVER_MODEL
+            }
+        }
+    } catch (error) {
+        return message.ERROR_INTERNAL_SERVER_CONTROLLER
+    }
 }
 
 //Funcão para tratar o retorno de filmes do DAO
@@ -61,7 +90,7 @@ const listarFilme = async function (){
         //Chama a função para retornar os filmes cadastrados
         let resultFilme = await filmeDAO.selectAllFilme()
         
-        if(resultFilme != false){
+        if(resultFilme != false || typeof(resultFilme) == 'object'){
             if(resultFilme.length > 0){
                 //Criando um JSON de retorno de dados para a API
                 dadosFilme.status = true
@@ -84,37 +113,34 @@ const listarFilme = async function (){
 //Funcão para tratar o retorno de um filme filtrando pelo id do DAO
 const buscarFilme = async function (idFilme){
     try {
-
-        let dadosFilme = {}
-
-        if(idFilme.isInteger || idFilme == '' || idFilme == undefined || idFilme == null){
-            return message.ERROR_REQUIRED_FIELDS
+        if(idFilme == '' || idFilme == undefined || idFilme == null || isNaN(idFilme) || idFilme <= 0){
+            return message.ERROR_REQUIRED_FIELDS //400
         }else{
-            let resultFilme = await filmeDAO.selectByIdFilme()
-            
-            if(resultFilme){
-                dadosFilme = {
-                    status: true,
-                    dadosFilme.status_code = 200,
-                    dadosFilme.film = resultFilme
-                }
+            dadosFilme = {}
+            let resultFilme = await filmeDAO.selectByIdFilme(idFilme)
+            if(resultFilme != false || typeof(resultFilme) == 'object'){
+                if(resultFilme.length > 0){
+                    dadosFilme.status = true
+                    dadosFilme.status_code = 200
+                    dadosFilme.films = resultFilme
 
-                return dadosFilme
+                    return dadosFilme
+                }else{
+                    return message.ERROR_NOT_FOUND //404
+                }
             }else{
-                return message.ERROR_INTERNAL_SERVER
+                return message.ERROR_INTERNAL_SERVER_MODEL //500
             }
         }
-        
-
     }catch (error) {
-        return message.ERROR_INTERNAL_SERVER_CONTROLLER
+        console.log(error)
+        return message.ERROR_INTERNAL_SERVER_CONTROLLER //500
+
     }
-    }
+}
 
 module.exports = {
     inserirFilme,
-    atualizarFilme,
-    excluirFilme,
     atualizarFilme,
     excluirFilme,
     listarFilme,

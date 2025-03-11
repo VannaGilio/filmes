@@ -14,6 +14,7 @@ const ERROR_CONTENT_TYPE = {staus: false, status_code: 415, message: "Não foi p
 const ERROR_NOT_FOUND = {status: false, status_code: 404, message: "Não foram encontrados itens de retorno"}
 //Status code de mensagens de sucesso
 const SUCCESS_CREATED_ITEM = {status: true, status_code: 201, message: "Item criado com sucesso!!!"}
+const SUCCESS_DELETED_ITEM = {status: true, status_code: 200, message: "Item excluído com sucesso!!!"}
 
 module.exports = {
     ERROR_REQUIRED_FIELDS,
@@ -22,5 +23,6 @@ module.exports = {
     ERROR_INTERNAL_SERVER_CONTROLLER,
     ERROR_INTERNAL_SERVER_MODEL,
     ERROR_CONTENT_TYPE,
-    ERROR_NOT_FOUND   
+    ERROR_NOT_FOUND,
+    SUCCESS_DELETED_ITEM
 }
