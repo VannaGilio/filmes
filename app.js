@@ -80,6 +80,23 @@ app.delete('/v1/controle-filmes/filme/:id', cors(), async function (request, res
     response.json(resultFilme)
 })
 
+app.put('/v1/controle-filmes/filme/:id', cors(), bodyParserJSON, async function (request, response){
+   
+    //recebe o content-type da requisição
+    let contentType = request.headers['content-type']
+   
+    //recebe o id da requisição
+    let idFilme = request.params.id
+
+    //recebe os dados da requisição
+    let dadosBody = request.body
+
+    let resultFilme = await controllerFilme.atualizarFilme(idFilme, dadosBody, contentType)
+
+    response.status(resultFilme.status_code)
+    response.json(resultFilme)
+})
+
 app.listen('3030', function(){
     console.log('API funcionando...')
 })

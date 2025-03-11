@@ -53,8 +53,15 @@ const updateFilme = async function(filme){
                                             foto_capa = '${filme.foto_capa}',
                                             link_trailer = '${filme.link_trailer}'
                                     where id = ${filme.id}`
-    } catch (error) {
-        
+
+        let resultFilme = await prisma.$executeRawUnsafe(sql)
+
+        if(resultFilme)
+            return true
+        else
+            return false
+    }catch(error){
+        return false
     }
 }
 
