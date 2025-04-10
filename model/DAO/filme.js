@@ -84,7 +84,7 @@ const deleteFilme = async function(id){
 const selectAllFilme = async function(){
     try {
         //ScriptSQL para retornar todos os dados
-        let sql = 'select * from tbl_filme order by id desc'
+        let sql = `select * from tbl_filme order by id desc`
         
         //Executa o scriptSQL no BD e aguarda o retorno dos dados
         let result = await prisma.$queryRawUnsafe(sql)
