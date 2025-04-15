@@ -17,13 +17,13 @@ create table tbl_filme(
 
 create table tbl_classificacao(
     id_classificacao int not null primary key auto_increment,
-    faixa_etaria varchar(10) not null,
+    faixa_etaria varchar(50) not null,
     link_icone_classificacao varchar(200) not null
 );
 
 create table tbl_nacionalidade(
     id_nacionalidade int not null primary key auto_increment,
-    nacionalidade varchar(30) not null
+    nacionalidade varchar(50) not null
 );
 
 create table tbl_tipo_premiacao(
@@ -48,7 +48,8 @@ create table tbl_plataforma(
 
 create table tbl_linguagem(
     id_linguagem int not null primary key auto_increment,
-    idioma varchar(100) not null
+    idioma varchar(100) not null,
+    codigo_iso varchar(10) not null
 );
 
 show tables;

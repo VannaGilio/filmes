@@ -119,7 +119,6 @@ const excluirFilme = async function (idFilme){
         return message.ERROR_INTERNAL_SERVER_CONTROLLER
     }
 }
-
 //Funcão para tratar o retorno de filmes do DAO
 const listarFilme = async function (){
     try {
@@ -148,7 +147,6 @@ const listarFilme = async function (){
         return message.ERROR_INTERNAL_SERVER_CONTROLLER //500
     }
 }
-
 //Funcão para tratar o retorno de um filme filtrando pelo id do DAO
 const buscarFilme = async function (idFilme){
     try {

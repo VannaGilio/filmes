@@ -40,16 +40,24 @@ const updateClassificacao = async function (classificacao) {
         let sql = `update tbl_classificacao set 
                                             '${classificacao.faixa_etaria}',
                                             '${classificacao.link_icone_classificacao}'
-        where id = ${classificacao.id_classificacao}`
+        where id_classificacao = ${classificacao.id_classificacao}`
+
+        let result = await prisma.$executeRawUnsafe(sql)
+
+        if(result)
+            return true
+        else
+            return false
     } catch (error) {
-        
+        return false
     }
 }
 
 //DELETE
 const deleteClassificacao = async function (id_classificacao) {
     try {
-        let sql = `delete from tbl_classificacao where id = ${id_classificacao}`
+        let sql = `delete from tbl_classificacao where id_classificacao = ${id_classificacao}`
+
         let result = await prisma.$executeRawUnsafe(sql)
 
         if(result)
@@ -65,7 +73,7 @@ const deleteClassificacao = async function (id_classificacao) {
 const selectClassificacao = async function () {
     try {
         //ScriptSQL para retornar todos os dados
-        let sql = `select * from tbl_classificacao order by id desc`
+        let sql = `select * from tbl_classificacao order by id_classificacao desc`
         
         //Executa o scriptSQL no BD e aguarda o retorno dos dados
         let result = await prisma.$queryRawUnsafe(sql)
@@ -83,7 +91,7 @@ const selectClassificacao = async function () {
 const selectByIdClassificacao = async function (classificacao) {
     try {
         //ScriptSQL para retornar todos os dados
-        let sql = `select * from tbl_classificacao where id = ${classificacao.id_classificacao}`
+        let sql = `select * from tbl_classificacao where id_classificacao = ${classificacao.id_classificacao}`
         
         //Executa o scriptSQL no BD e aguarda o retorno dos dados
         let result = await prisma.$queryRawUnsafe(sql)
