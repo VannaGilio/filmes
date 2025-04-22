@@ -46,7 +46,7 @@ const updateGenero = async function (genero) {
 }
 const deleteGenero = async function (id_genero) {
     try {
-        let sql = `delete tbl_genero where id_genero = ${id_genero}`
+        let sql = `delete from tbl_genero where id_genero = ${id_genero}`
 
         let result = await prisma.$executeRawUnsafe(sql)
         
@@ -60,7 +60,7 @@ const deleteGenero = async function (id_genero) {
 }
 const selectAllGenero = async function () {
     try {
-        let sql = `select * from tbl_genero order by desc`
+        let sql = `select * from tbl_genero order by id_genero desc`
 
         let result = await prisma.$queryRawUnsafe(sql)
         
@@ -69,6 +69,7 @@ const selectAllGenero = async function () {
         else
             return false
     } catch (error) {
+        console.log(error)
         return false
     }
 }

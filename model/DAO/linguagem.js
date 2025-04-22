@@ -15,11 +15,11 @@ const prisma = new PrismaClient()
 const insertLinguagem = async function (linguagem) {
     try {
         let sql = `insert into tbl_linguagem(
-                                            linguagem,
+                                            idioma,
                                             codigo_iso
                                         )
                                         values(
-                                            '${linguagem.linguagem}',
+                                            '${linguagem.idioma}',
                                             '${linguagem.codigo_iso}'
                                         )`
 
@@ -35,7 +35,7 @@ const insertLinguagem = async function (linguagem) {
 }
 const updateLinguagem = async function (linguagem) {
     try {
-        let sql = `update tbl_linguagem set linguagem = '${linguagem.linguagem}',
+        let sql = `update tbl_linguagem set idioma = '${linguagem.idioma}',
                                             codigo_iso = '${linguagem.codigo_iso}'
                     where id_linguagem = ${linguagem.id_linguagem}`
 
@@ -51,7 +51,7 @@ const updateLinguagem = async function (linguagem) {
 }
 const deleteLinguagem = async function (id_linguagem) {
     try {
-        let sql = `delete tbl_linguagem where id_linguagem = ${id_linguagem}`
+        let sql = `delete from tbl_linguagem where id_linguagem = ${id_linguagem}`
 
         let result = await prisma.$executeRawUnsafe(sql)
 
@@ -65,7 +65,7 @@ const deleteLinguagem = async function (id_linguagem) {
 }
 const selectAllLinguagem = async function () {
     try {
-        let sql = `select * from tbl_linguagem order by desc`
+        let sql = `select * from tbl_linguagem order by id_linguagem desc`
 
         let result = await prisma.$queryRawUnsafe(sql)
 

@@ -130,7 +130,7 @@ const buscarPlataforma = async function (id) {
             return message.ERROR_REQUIRED_FIELDS //400
         } else {
             dadosPlataforma = {}
-            let resultPlataforma = await plataformaDAO.selectAllPlataforma(id)
+            let resultPlataforma = await plataformaDAO.selectByIdPlataforma(id)
             if (resultPlataforma != false || typeof (resultPlataforma) == 'object') {
                 if (resultPlataforma.length > 0) {
                     dadosPlataforma.status = true

@@ -14,7 +14,7 @@ const prisma = new PrismaClient()
 
 const insertNacionalidade = async function (nacionalidade) {
     try {
-        let sql = `insert to into tbl_nacionalidade (
+        let sql = `insert into tbl_nacionalidade (
                                                         nacionalidade                           
                                                         )
                                                         values(

@@ -40,7 +40,6 @@ app.use((request, response, next)=>{
 })
 
 const controllerFilme = require('./controller/filme/controllerFilme')
-
 app.post('/v1/controle-filmes/filme', cors(), bodyParserJSON, async function(request, response) {
 
     //Recebe o content type da requisição
@@ -188,7 +187,7 @@ app.post('/v1/controle-filmes/linguagem', cors(), bodyParserJSON, async function
     
     let dadosBody = request.body
 
-    let resultLinguagem = await controllerLinguagem.inserirLinguagem(contentType, dadosBody)
+    let resultLinguagem = await controllerLinguagem.inserirLinguagem(dadosBody, contentType)
 
     response.status(resultLinguagem.status_code)
     response.json(resultLinguagem)
@@ -222,13 +221,40 @@ app.put('/v1/controle-filmes/linguagem/:id', cors(), bodyParserJSON, async funct
     let idLinguagem = request.params.id
 
     let resultLinguagem = await controllerLinguagem.atualizarLinguagem(idLinguagem, contentType, dadosBody)
+
+    response.status(resultLinguagem.status_code)
+    response.json(resultLinguagem)
 })
 
 const controllerNacionalidade = require('./controller/filme/controllerNacionalidade')
-app.post('/v1/controle-filmes/nacionalidade', cors(), bodyParserJSON, async function(request, response) {})
-app.get('/v1/controle-filmes/nacionalidade', cors(), bodyParserJSON, async function(request, response) {})
-app.get('/v1/controle-filmes/nacionalidade/:id', cors(), bodyParserJSON, async function(request, response) {})
-app.delete('/v1/controle-filmes/nacionalidade/:id', cors(), bodyParserJSON, async function(request, response) {})
+app.post('/v1/controle-filmes/nacionalidade', cors(), bodyParserJSON, async function(request, response) {
+    let dadosBody = request.body
+    let contentType = request.headers['content-type']
+    let resultNacionalidade = await controllerNacionalidade.inserirNacionalidade(dadosBody,contentType)
+
+    response.status(resultNacionalidade.status_code)
+    response.json(resultNacionalidade)
+})
+app.get('/v1/controle-filmes/nacionalidade', cors(), bodyParserJSON, async function(request, response) {
+    let resultNacionalidade = await controllerNacionalidade.listarNacionalidade()
+
+    response.status(resultNacionalidade.status_code)
+    response.json(resultNacionalidade)
+})
+app.get('/v1/controle-filmes/nacionalidade/:id', cors(), bodyParserJSON, async function(request, response) {
+    let idNacionalidade = request.params.id
+    let resultNacionalidade = await controllerNacionalidade.buscarNacionalidade(idNacionalidade)
+
+    response.status(resultNacionalidade.status_code)
+    response.json(resultNacionalidade)
+})
+app.delete('/v1/controle-filmes/nacionalidade/:id', cors(), bodyParserJSON, async function(request, response) {
+    let idNacionalidade = request.params.id
+    let resultNacionalidade = await controllerNacionalidade.excluirNacionalidade(idNacionalidade)
+
+    response.status(resultNacionalidade.status_code)
+    response.json(resultNacionalidade)
+})
 app.put('/v1/controle-filmes/nacionalidade/:id', cors(), bodyParserJSON, async function(request, response) {
     let contentType = request.headers['content-type']
 
@@ -243,25 +269,130 @@ app.put('/v1/controle-filmes/nacionalidade/:id', cors(), bodyParserJSON, async f
 })
 
 const controllerPlataforma = require('./controller/filme/controllerPlataforma')
-app.post('/v1/controle-filmes/plataforma', cors(), bodyParserJSON, async function(request, response) {})
-app.get('/v1/controle-filmes/plataforma', cors(), bodyParserJSON, async function(request, response) {})
-app.get('/v1/controle-filmes/plataforma/:id', cors(), bodyParserJSON, async function(request, response) {})
-app.delete('/v1/controle-filmes/plataforma/:id', cors(), bodyParserJSON, async function(request, response) {})
-app.put('/v1/controle-filmes/plataforma/:id', cors(), bodyParserJSON, async function(request, response) {})
+app.post('/v1/controle-filmes/plataforma', cors(), bodyParserJSON, async function(request, response) {
+    let dadosBody = request.body
+    let contentType = request.headers['content-type']
+    let resultPlataforma = await controllerPlataforma.inserirPlataforma(dadosBody,contentType)
+
+    response.status(resultPlataforma.status_code)
+    response.json(resultPlataforma)
+})
+app.get('/v1/controle-filmes/plataforma', cors(), bodyParserJSON, async function(request, response) {
+    let resultPlataforma = await controllerPlataforma.listarPlataforma()
+
+    response.status(resultPlataforma.status_code)
+    response.json(resultPlataforma)
+})
+app.get('/v1/controle-filmes/plataforma/:id', cors(), bodyParserJSON, async function(request, response) {
+    let idPlataforma = request.params.id
+    let resultPlataforma = await controllerPlataforma.buscarPlataforma(idPlataforma)
+
+    response.status(resultPlataforma.status_code)
+    response.json(resultPlataforma)
+})
+app.delete('/v1/controle-filmes/plataforma/:id', cors(), bodyParserJSON, async function(request, response) {
+    let idPlataforma = request.params.id
+    let resultPlataforma = await controllerPlataforma.excluirPlataforma(idPlataforma)
+
+    response.status(resultPlataforma.status_code)
+    response.json(resultPlataforma)
+})
+app.put('/v1/controle-filmes/plataforma/:id', cors(), bodyParserJSON, async function(request, response) {
+    let contentType = request.headers['content-type']
+
+    let idPlataforma = request.params.id
+
+    let dadosBody = request.body
+    
+    let resultPlataforma = await controllerPlataforma.atualizarPlataforma(idPlataforma, dadosBody, contentType)
+
+    response.status(resultPlataforma.status_code)
+    response.json(resultPlataforma)
+})
 
 const controllerSexo = require('./controller/filme/controllerSexo')
-app.post('/v1/controle-filmes/sexo', cors(), bodyParserJSON, async function(request, response) {})
-app.get('/v1/controle-filmes/sexo', cors(), bodyParserJSON, async function(request, response) {})
-app.get('/v1/controle-filmes/sexo/:id', cors(), bodyParserJSON, async function(request, response) {})
-app.delete('/v1/controle-filmes/sexo/:id', cors(), bodyParserJSON, async function(request, response) {})
-app.put('/v1/controle-filmes/sexo/:id', cors(), bodyParserJSON, async function(request, response) {})
+app.post('/v1/controle-filmes/sexo', cors(), bodyParserJSON, async function(request, response) {
+    let dadosBody = request.body
+    let contentType = request.headers['content-type']
+    let resultSexo = await controllerSexo.inserirSexo(dadosBody, contentType)
+
+    response.status(resultSexo.status_code)
+    response.json(resultSexo)
+})
+app.get('/v1/controle-filmes/sexo', cors(), bodyParserJSON, async function(request, response) {
+    let resultSexo = await controllerSexo.listarSexo()
+
+    response.status(resultSexo.status_code)
+    response.json(resultSexo)
+})
+app.get('/v1/controle-filmes/sexo/:id', cors(), bodyParserJSON, async function(request, response) {
+    let idSexo = request.params.id
+    let resultSexo = await controllerSexo.buscarSexo(idSexo)
+
+    response.status(resultSexo.status_code)
+    response.json(resultSexo)
+})
+app.delete('/v1/controle-filmes/sexo/:id', cors(), bodyParserJSON, async function(request, response) {
+    let idSexo = request.params.id
+    let resultSexo = await controllerSexo.excluirSexo(idSexo)
+
+    response.status(resultSexo.status_code)
+    response.json(resultSexo)
+})
+app.put('/v1/controle-filmes/sexo/:id', cors(), bodyParserJSON, async function(request, response) {
+    let contentType = request.headers['content-type']
+
+    let idSexo = request.params.id
+
+    let dadosBody = request.body
+    
+    let resultSexo = await controllerSexo.atualizarSexo(idSexo, dadosBody, contentType)
+
+    response.status(resultSexo.status_code)
+    response.json(resultSexo)
+})
 
 const controllerTipoPremiacao = require('./controller/filme/controllerTipoPremiacao')
-app.post('/v1/controle-filmes/tipopremiacao', cors(), bodyParserJSON, async function(request, response) {})
-app.get('/v1/controle-filmes/tipopremiacao', cors(), bodyParserJSON, async function(request, response) {})
-app.get('/v1/controle-filmes/tipopremiacao/:id', cors(), bodyParserJSON, async function(request, response) {})
-app.delete('/v1/controle-filmes/tipopremiacao/:id', cors(), bodyParserJSON, async function(request, response) {})
-app.put('/v1/controle-filmes/tipopremiacao/:id', cors(), bodyParserJSON, async function(request, response) {})
+app.post('/v1/controle-filmes/tipopremiacao', cors(), bodyParserJSON, async function(request, response) {
+    let dadosBody = request.body
+    let contentType = request.headers['content-type']
+    let resultTipoPremiacao = await controllerTipoPremiacao.inserirTipoPremiacao(dadosBody,contentType)
+
+    response.status(resultTipoPremiacao.status_code)
+    response.json(resultTipoPremiacao)
+})
+app.get('/v1/controle-filmes/tipopremiacao', cors(), bodyParserJSON, async function(request, response) {
+    let resultTipoPremiacao = await controllerTipoPremiacao.listarTipoPremicao()
+
+    response.status(resultTipoPremiacao.status_code)
+    response.json(resultTipoPremiacao)
+})
+app.get('/v1/controle-filmes/tipopremiacao/:id', cors(), bodyParserJSON, async function(request, response) {
+    let idTipoPremiacao = request.params.id
+    let resultTipoPremiacao = await controllerTipoPremiacao.buscarTipoPremiacao(idTipoPremiacao)
+
+    response.status(resultTipoPremiacao.status_code)
+    response.json(resultTipoPremiacao)
+})
+app.delete('/v1/controle-filmes/tipopremiacao/:id', cors(), bodyParserJSON, async function(request, response) {
+    let idTipoPremiacao = request.params.id
+    let resultTipoPremiacao = await controllerTipoPremiacao.excluirTipoPremiacao(idTipoPremiacao)
+
+    response.status(resultTipoPremiacao.status_code)
+    response.json(resultTipoPremiacao)
+})
+app.put('/v1/controle-filmes/tipopremiacao/:id', cors(), bodyParserJSON, async function(request, response) {
+    let contentType = request.headers['content-type']
+
+    let idTipoPremiacao = request.params.id
+
+    let dadosBody = request.body
+    
+    let resultTipoPremiacao = await controllerTipoPremiacao.atualizarTipoPremiacao(idTipoPremiacao, dadosBody, contentType)
+
+    response.status(resultTipoPremiacao.status_code)
+    response.json(resultTipoPremiacao)
+})
 
 app.listen('3030', function(){
     console.log('API funcionando...')

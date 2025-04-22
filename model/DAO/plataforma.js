@@ -47,7 +47,7 @@ const updatePlataforma = async function (plataforma) {
 }
 const deletePlataforma = async function (id_plataforma) {
     try {
-        let sql = `delete tbl_plataforma where id_plataforma = ${id_plataforma}`
+        let sql = `delete from tbl_plataforma where id_plataforma = ${id_plataforma}`
 
         let result = await prisma.$executeRawUnsafe(sql)
         
@@ -61,7 +61,7 @@ const deletePlataforma = async function (id_plataforma) {
 }
 const selectAllPlataforma = async function () {
     try {
-        let sql = `select * from tbl_plataforma order by desc`
+        let sql = `select * from tbl_plataforma order by id_plataforma desc`
 
         let result = await prisma.$queryRawUnsafe(sql)
         

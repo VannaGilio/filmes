@@ -130,7 +130,7 @@ const buscarTipoPremiacao = async function (id) {
             return message.ERROR_REQUIRED_FIELDS //400
         } else {
             dadosTipoPremiacao = {}
-            let resultTipoPremiacao = await tipoPremiacaoDAO.selectAllTipoPremiacao(id)
+            let resultTipoPremiacao = await tipoPremiacaoDAO.selectByIdTipoPremiacao(id)
             if (resultTipoPremiacao != false || typeof (resultTipoPremiacao) == 'object') {
                 if (resultTipoPremiacao.length > 0) {
                     dadosTipoPremiacao.status = true

@@ -37,9 +37,8 @@ const insertClassificacao = async function (classificacao) {
 //UPDATE
 const updateClassificacao = async function (classificacao) {
     try {
-        let sql = `update tbl_classificacao set 
-                                            '${classificacao.faixa_etaria}',
-                                            '${classificacao.link_icone_classificacao}'
+        let sql = `update tbl_classificacao set     faixa_etaria = '${classificacao.faixa_etaria}',
+                                                    link_icone_classificacao = '${classificacao.link_icone_classificacao}'
         where id_classificacao = ${classificacao.id_classificacao}`
 
         let result = await prisma.$executeRawUnsafe(sql)
@@ -88,10 +87,10 @@ const selectClassificacao = async function () {
 }
 
 //SELECT BY ID
-const selectByIdClassificacao = async function (classificacao) {
+const selectByIdClassificacao = async function (id_classificacao) {
     try {
         //ScriptSQL para retornar todos os dados
-        let sql = `select * from tbl_classificacao where id_classificacao = ${classificacao.id_classificacao}`
+        let sql = `select * from tbl_classificacao where id_classificacao = ${id_classificacao}`
         
         //Executa o scriptSQL no BD e aguarda o retorno dos dados
         let result = await prisma.$queryRawUnsafe(sql)

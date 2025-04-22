@@ -27,7 +27,7 @@ const inserirLinguagem = async function (linguagem, contentType) {
     }
 }
 
-const atualizarLinguagem = async function (id, linguagem, contentType) {
+const atualizarLinguagem = async function (id, contentType, linguagem) {
     try {
         if (String(contentType).toLowerCase() == 'application/json') {
             if (id == '' || id == undefined || id == null || isNaN(id) || id <= 0 ||

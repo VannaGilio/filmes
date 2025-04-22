@@ -26,20 +26,19 @@ const inserirGenero = async function (genero, contentType) {
     }
 }
 
-const atualizarGenero = async function (id, genero, contentType) {
+const atualizarGenero = async function (id, contentType, genero) {
     try {
-        if (String(contentType).toLowerCase() == 'application/json') {
+        if (String(contentType) == 'application/json') {
             if (id == '' || id == undefined || id == null || isNaN(id) || id <= 0 ||
-                genero.genero == '' || genero.genero == undefined || genero.genero == null || genero.genero.length > 50
+                genero.genero == '' || genero.genero == undefined || genero.genero == null
             ) {
                 return message.ERROR_REQUIRED_FIELDS //400
             } else {
-                //validação para verificar se o id existe no bd
+
                 let resultGenero = await generoDAO.selectByIdGenero(parseInt(id))
 
                 if (resultGenero != false || typeof (resultGenero) == 'object') {
                     if (resultGenero.length > 0) {
-                        //add o id do filme no json com os dados
                         genero.id_genero = parseInt(id)
 
                         let result = await generoDAO.updateGenero(genero)
@@ -70,7 +69,7 @@ const excluirGenero = async function (id) {
         } else {
 
             //função que verifica se ID existe no BD
-            let resultGenero = await generoDAO.selectAllGenero(parseInt(id))
+            let resultGenero = await generoDAO.selectByIdGenero(parseInt(id))
 
             if (resultGenero != false || typeof (resultGenero) == 'object') {
                 //se exestir, faremos o delete
@@ -97,31 +96,30 @@ const excluirGenero = async function (id) {
 }
 
 const listarGenero = async function () {
-      try {
-            //Objeto do tipo JSON
-            let dadosGenero = {}
-    
-            //Chama a função para retornar os filmes cadastrados
-            let resultGenero = await generoDAO.selectAllGenero()
-            
-            if(resultGenero != false || typeof(resultGenero) == 'object'){
-                if(resultGenero.length > 0){
-                    //Criando um JSON de retorno de dados para a API
-                    dadosGenero.status = true
-                    dadosGenero.status_code = 200
-                    dadosGenero.items = resultGenero.length
-                    dadosGenero.genero = resultGenero
-    
-                    return dadosGenero
-                }else{
-                    return message.ERROR_NOT_FOUND //404
-                }
-            }else{
-                return message.ERROR_INTERNAL_SERVER_MODEL //500
+    try {
+        //Objeto do tipo JSON
+        let dadosGenero = {}
+
+        let resultGenero = await generoDAO.selectAllGenero()
+
+        if (resultGenero != false || typeof (resultGenero) == 'object') {
+            if (resultGenero.length > 0) {
+                //Criando um JSON de retorno de dados para a API
+                dadosGenero.status = true
+                dadosGenero.status_code = 200
+                dadosGenero.items = resultGenero.length
+                dadosGenero.genero = resultGenero
+
+                return dadosGenero
+            } else {
+                return message.ERROR_NOT_FOUND //404
             }
-        } catch (error) {
-            return message.ERROR_INTERNAL_SERVER_CONTROLLER //500
+        } else {
+            return message.ERROR_INTERNAL_SERVER_MODEL //500
         }
+    } catch (error) {
+        return message.ERROR_INTERNAL_SERVER_CONTROLLER //500
+    }
 }
 
 const buscarGenero = async function (id) {
