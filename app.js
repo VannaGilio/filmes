@@ -54,7 +54,6 @@ app.post('/v1/controle-filmes/filme', cors(), bodyParserJSON, async function(req
     response.status(resultFilme.status_code)
     response.json(resultFilme)
 })
-
 app.get('/v1/controle-filmes/filme', cors(), async function(request, response){
     //Chama a função para retornar os filmes
     let resultFilme = await controllerFilme.listarFilme()
@@ -62,7 +61,6 @@ app.get('/v1/controle-filmes/filme', cors(), async function(request, response){
     response.status(resultFilme.status_code)
     response.json(resultFilme)
 })
-
 app.get('/v1/controle-filmes/filme/:id', cors(), async function (request, response){
     //recebe o id da requisição
     let idFilme = request.params.id
@@ -71,7 +69,6 @@ app.get('/v1/controle-filmes/filme/:id', cors(), async function (request, respon
     response.status(resultFilme.status_code)
     response.json(resultFilme)
 })
-
 app.delete('/v1/controle-filmes/filme/:id', cors(), async function (request, response){
     let idFilme = request.params.id
     let resultFilme = await controllerFilme.excluirFilme(idFilme)
@@ -79,7 +76,6 @@ app.delete('/v1/controle-filmes/filme/:id', cors(), async function (request, res
     response.status(resultFilme.status_code)
     response.json(resultFilme)
 })
-
 app.put('/v1/controle-filmes/filme/:id', cors(), bodyParserJSON, async function (request, response){
    
     //recebe o content-type da requisição
@@ -96,6 +92,176 @@ app.put('/v1/controle-filmes/filme/:id', cors(), bodyParserJSON, async function 
     response.status(resultFilme.status_code)
     response.json(resultFilme)
 })
+
+
+const controllerClassificacao = require('./controller/filme/controllerClassificacao')
+app.post('/v1/controle-filmes/classificacao', cors(), bodyParserJSON, async function(request, response) {
+    let contentType = request.headers['content-type']
+
+    let dadosBody = request.body
+
+    let resultClassificacao = await controllerClassificacao.inserirClassificacao(dadosBody, contentType)
+
+    response.status(resultClassificacao.status_code)
+    response.json(resultClassificacao)
+})
+app.get('/v1/controle-filmes/classificacao', cors(), bodyParserJSON, async function(request, response) {
+    let resultClassificacao = await controllerClassificacao.listarClassificacao()
+
+    response.status(resultClassificacao.status_code)
+    response.json(resultClassificacao)
+})
+app.get('/v1/controle-filmes/classificacao/:id', cors(), bodyParserJSON, async function(request, response) {
+    let idClassificacao = request.params.id
+    let resultClassificacao = await controllerClassificacao.buscarClassificacao(idClassificacao)
+
+    response.status(resultClassificacao.status_code)
+    response.json(resultClassificacao)
+})
+app.delete('/v1/controle-filmes/classificacao/:id', cors(), bodyParserJSON, async function(request, response) {
+    let idClassificacao = request.params.id
+    let resultClassificacao = await controllerClassificacao.excluirClassificacao(idClassificacao)
+
+    response.status(resultClassificacao.status_code)
+    response.json(resultClassificacao)
+})
+app.put('/v1/controle-filmes/classificacao/:id', cors(), bodyParserJSON, async function(request, response) {
+    let contentType = request.headers['content-type']
+
+    let idClassificacao = request.params.id
+
+    let dadosBody = request.body
+    
+    let resultClassificacao = await controllerClassificacao.atualizarClassificacao(idClassificacao, dadosBody, contentType)
+
+    response.status(resultClassificacao.status_code)
+    response.json(resultClassificacao)
+})
+
+const controllerGenero = require('./controller/filme/controllerGenero')
+app.post('/v1/controle-filmes/genero', cors(), bodyParserJSON, async function(request, response) {
+    let contentType = request.headers['content-type']
+
+    let dadosBody = request.body
+
+    let resultGenero = await controllerGenero.inserirGenero(dadosBody, contentType)
+
+    response.status(resultGenero.status_code)
+    response.json(resultGenero)
+})
+app.get('/v1/controle-filmes/genero', cors(), bodyParserJSON, async function(request, response) {
+    let resultGenero = await controllerGenero.listarGenero()
+
+    response.status(resultGenero.status_code)
+    response.json(resultGenero)
+})
+app.get('/v1/controle-filmes/genero/:id', cors(), bodyParserJSON, async function(request, response) {
+    let idGenero = request.params.id
+    let resultGenero = await controllerGenero.buscarGenero(idGenero)
+
+    response.status(resultGenero.status_code)
+    response.json(resultGenero)
+})
+app.delete('/v1/controle-filmes/genero/:id', cors(), bodyParserJSON, async function(request, response) {
+    let idGenero = request.params.id
+    let resultGenero = await controllerGenero.excluirGenero(idGenero)
+
+    response.status(resultGenero.status_code)
+    response.json(resultGenero)
+})
+app.put('/v1/controle-filmes/genero/:id', cors(), bodyParserJSON, async function(request, response) {
+    let contentType = request.headers['content-type']
+
+    let idGenero = request.params.id
+
+    let dadosBody = request.body
+
+    let resultGenero = await controllerGenero.atualizarGenero(idGenero, contentType, dadosBody)
+
+    response.status(resultGenero.status_code)
+    response.json(resultGenero)
+})
+
+const controllerLinguagem = require('./controller/filme/controllerLinguagem')
+app.post('/v1/controle-filmes/linguagem', cors(), bodyParserJSON, async function(request, response) {
+    let contentType = request.headers['content-type']
+    
+    let dadosBody = request.body
+
+    let resultLinguagem = await controllerLinguagem.inserirLinguagem(contentType, dadosBody)
+
+    response.status(resultLinguagem.status_code)
+    response.json(resultLinguagem)
+})
+app.get('/v1/controle-filmes/linguagem', cors(), bodyParserJSON, async function(request, response) {
+    let resultLinguagem = await controllerLinguagem.listarLinguagem()
+
+    response.status(resultLinguagem.status_code)
+    response.json(resultLinguagem)
+})
+app.get('/v1/controle-filmes/linguagem/:id', cors(), bodyParserJSON, async function(request, response) {
+    let idLinguagem = request.params.id
+
+    let resultLinguagem = await controllerLinguagem.buscarLinguagem(idLinguagem)
+
+    response.status(resultLinguagem.status_code)
+    response.json(resultLinguagem)
+})
+app.delete('/v1/controle-filmes/linguagem/:id', cors(), bodyParserJSON, async function(request, response) {
+    let idLinguagem = request.params.id
+    let resultLinguagem = await controllerLinguagem.excluirLinguagem(idLinguagem)
+
+    response.status(resultLinguagem.status_code)
+    response.json(resultLinguagem)
+})
+app.put('/v1/controle-filmes/linguagem/:id', cors(), bodyParserJSON, async function(request, response) {
+    let dadosBody = request.body
+
+    let contentType = request.headers['content-type']
+
+    let idLinguagem = request.params.id
+
+    let resultLinguagem = await controllerLinguagem.atualizarLinguagem(idLinguagem, contentType, dadosBody)
+})
+
+const controllerNacionalidade = require('./controller/filme/controllerNacionalidade')
+app.post('/v1/controle-filmes/nacionalidade', cors(), bodyParserJSON, async function(request, response) {})
+app.get('/v1/controle-filmes/nacionalidade', cors(), bodyParserJSON, async function(request, response) {})
+app.get('/v1/controle-filmes/nacionalidade/:id', cors(), bodyParserJSON, async function(request, response) {})
+app.delete('/v1/controle-filmes/nacionalidade/:id', cors(), bodyParserJSON, async function(request, response) {})
+app.put('/v1/controle-filmes/nacionalidade/:id', cors(), bodyParserJSON, async function(request, response) {
+    let contentType = request.headers['content-type']
+
+    let idNacionalidade = request.params.id
+
+    let dadosBody = request.body
+    
+    let resultNacionalidade = await controllerNacionalidade.atualizarNacionalidade(idNacionalidade, dadosBody, contentType)
+
+    response.status(resultNacionalidade.status_code)
+    response.json(resultNacionalidade)
+})
+
+const controllerPlataforma = require('./controller/filme/controllerPlataforma')
+app.post('/v1/controle-filmes/plataforma', cors(), bodyParserJSON, async function(request, response) {})
+app.get('/v1/controle-filmes/plataforma', cors(), bodyParserJSON, async function(request, response) {})
+app.get('/v1/controle-filmes/plataforma/:id', cors(), bodyParserJSON, async function(request, response) {})
+app.delete('/v1/controle-filmes/plataforma/:id', cors(), bodyParserJSON, async function(request, response) {})
+app.put('/v1/controle-filmes/plataforma/:id', cors(), bodyParserJSON, async function(request, response) {})
+
+const controllerSexo = require('./controller/filme/controllerSexo')
+app.post('/v1/controle-filmes/sexo', cors(), bodyParserJSON, async function(request, response) {})
+app.get('/v1/controle-filmes/sexo', cors(), bodyParserJSON, async function(request, response) {})
+app.get('/v1/controle-filmes/sexo/:id', cors(), bodyParserJSON, async function(request, response) {})
+app.delete('/v1/controle-filmes/sexo/:id', cors(), bodyParserJSON, async function(request, response) {})
+app.put('/v1/controle-filmes/sexo/:id', cors(), bodyParserJSON, async function(request, response) {})
+
+const controllerTipoPremiacao = require('./controller/filme/controllerTipoPremiacao')
+app.post('/v1/controle-filmes/tipopremiacao', cors(), bodyParserJSON, async function(request, response) {})
+app.get('/v1/controle-filmes/tipopremiacao', cors(), bodyParserJSON, async function(request, response) {})
+app.get('/v1/controle-filmes/tipopremiacao/:id', cors(), bodyParserJSON, async function(request, response) {})
+app.delete('/v1/controle-filmes/tipopremiacao/:id', cors(), bodyParserJSON, async function(request, response) {})
+app.put('/v1/controle-filmes/tipopremiacao/:id', cors(), bodyParserJSON, async function(request, response) {})
 
 app.listen('3030', function(){
     console.log('API funcionando...')
