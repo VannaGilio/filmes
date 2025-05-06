@@ -12,7 +12,11 @@ create table tbl_filme(
     sinopse text not null,
     data_lancamento date not null,
     foto_capa varchar(200),
-    link_trailer varchar(200)
+    link_trailer varchar(200),
+    id_classificacao int not null,
+    constraint FK_CLASSIFICACAO_FILME
+    foreign key (id_classificacao) 
+    references tbl_classificacao(id)
 );
 
 create table tbl_classificacao(
@@ -57,3 +61,10 @@ show tables;
 desc tbl_filme;
 
 select * from tbl_filme
+
+#chave estrangeira
+ALTER TABLE tbl_filme
+ADD id_classificacao INT,
+ADD CONSTRAINT fk_classificacao_filme
+    FOREIGN KEY (id_classificacao)
+    REFERENCES tbl_classificacao(id_classificacao);

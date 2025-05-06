@@ -10,7 +10,11 @@ const message = require('../../modulo/config')
 
 const filmeDAO = require('../../model/DAO/filme')
 
-//Funcão para tratar a inserção de um novo filme no DAO
+//Import das controller necessárias para fazer os relacionamentos
+const controllerFilmeGenero = require('../filme/controllerFilmeGenero')
+const controllerClassificacao = require('../classificacao/controllerClassificacao.js')
+
+//Funcão para tratar a inserção de um novo filme no DAO ok
 const inserirFilme = async function (filme, contentType){
     try{
 
@@ -21,7 +25,8 @@ const inserirFilme = async function (filme, contentType){
                 filme.sinopse              == '' || filme.sinopse          == undefined || filme.sinopse          == null ||
                 filme.data_lancamento      == '' || filme.data_lancamento  == undefined || filme.data_lancamento  == null || filme.data_lancamento.length  > 10 ||
                 filme.foto_capa.length     > 200 || filme.foto_capa        == undefined ||
-                filme.link_trailer.length  > 200 || filme.link_trailer     == undefined
+                filme.link_trailer.length  > 200 || filme.link_trailer     == undefined ||
+                filme.id_classificacao     == '' || filme.id_classificacao == undefined
             )
             {
                 return message.ERROR_REQUIRED_FIELDS //400
@@ -42,7 +47,7 @@ const inserirFilme = async function (filme, contentType){
     }
    
 }
-//Funcão para tratar a atualização de um novo filme no DAO
+//Funcão para tratar a atualização de um novo filme no DAO ok
 const atualizarFilme = async function (id, filme, contentType){
     try {
         if(String(contentType).toLowerCase() == 'application/json')
@@ -53,7 +58,8 @@ const atualizarFilme = async function (id, filme, contentType){
                     filme.sinopse              == '' || filme.sinopse          == undefined || filme.sinopse          == null ||
                     filme.data_lancamento      == '' || filme.data_lancamento  == undefined || filme.data_lancamento  == null || filme.data_lancamento.length  > 10 ||
                     filme.foto_capa.length     > 200 || filme.foto_capa        == undefined ||
-                    filme.link_trailer.length  > 200 || filme.link_trailer     == undefined
+                    filme.link_trailer.length  > 200 || filme.link_trailer     == undefined ||
+                    filme.id_classificacao  == ''    || filme.id_classificacao == undefined
                 )
                 {
                     return message.ERROR_REQUIRED_FIELDS //400
@@ -86,7 +92,7 @@ const atualizarFilme = async function (id, filme, contentType){
         return message.ERROR_INTERNAL_SERVER_CONTROLLER
     }
 }
-//Funcão para tratar a excluir de um novo filme no DAO
+//Funcão para tratar a excluir de um novo filme no DAO ok
 const excluirFilme = async function (idFilme){
     try {
         if(idFilme == '' || idFilme == undefined || idFilme == null || isNaN(idFilme) || idFilme <= 0){
@@ -122,6 +128,9 @@ const excluirFilme = async function (idFilme){
 //Funcão para tratar o retorno de filmes do DAO
 const listarFilme = async function (){
     try {
+        //Cria um objeto array para montar a nova estrutura de filmes no forEach
+        let arrayFilmes = []
+
         //Objeto do tipo JSON
         let dadosFilme = {}
 
@@ -135,6 +144,36 @@ const listarFilme = async function (){
                 dadosFilme.status_code = 200
                 dadosFilme.items = resultFilme.length
                 dadosFilme.films = resultFilme
+
+                //Percorrer o array de filmes para pegar cada ID de classificação
+                // e descobrir quais os dados da classificação
+                
+                // resultFilme.forEach( async function(itemFilme){
+                //Precisamos utilizar o for of, pois o foreach não consegue trabalhar com 
+                // requisições async com await
+
+                for(const itemFilme of resultFilme){
+                    /* Monta o objeto da classificação para retornar no Filme (1XN) */
+                        //Busca os dados da classificação na controller de classificacao
+                        let dadosClassificacao = await controllerClassificacao.buscarClassificacao(itemFilme.id_classificacao)
+                        //Adiciona um atributo classificação no JSON de filmes e coloca os dados da classificação
+                        itemFilme.classificacao = dadosClassificacao.classificacao
+                        //Remover um atributo do JSON
+                        delete itemFilme.id_classificacao
+
+                    /* Monta o objeto de Generos para retornar no Filme (Relação NxN) */
+                        //encaminha o id do filme para a controller retornar os generos associados a esse filme
+                        // let dadosGenero = await controllerFilmeGenero.buscarGeneroPorFilme(itemFilme.id)
+                        // console.log(dadosGenero)
+                        // //Adiciona um atributo genero no JSON de filmes e coloca os dados do genero
+                        // itemFilme.genero = dadosGenero.genero
+
+                    //Adiciona em um novo array o JSON de filmes com a sua nova estrutura de dados
+                    arrayFilmes.push(itemFilme)
+ 
+                }
+                
+                dadosFilme.films = arrayFilmes
 
                 return dadosFilme
             }else{
@@ -150,16 +189,40 @@ const listarFilme = async function (){
 //Funcão para tratar o retorno de um filme filtrando pelo id do DAO
 const buscarFilme = async function (idFilme){
     try {
+        
+/**/    let arrayFilmes = []
+
         if(idFilme == '' || idFilme == undefined || idFilme == null || isNaN(idFilme) || idFilme <= 0){
             return message.ERROR_REQUIRED_FIELDS //400
         }else{
             dadosFilme = {}
-            let resultFilme = await filmeDAO.selectByIdFilme(idFilme)
+            let resultFilme = await filmeDAO.selectByIdFilme(parseInt(idFilme))
             if(resultFilme != false || typeof(resultFilme) == 'object'){
                 if(resultFilme.length > 0){
+                    //dados de retorno da API
                     dadosFilme.status = true
                     dadosFilme.status_code = 200
                     dadosFilme.films = resultFilme
+
+    /**/
+                    for(const itemFilme of resultFilme){
+                        //Busca os dados da classificação na controller de classificacao
+                        let dadosClassificacao = await controllerClassificacao.buscarClassificacao(itemFilme.id_classificacao)
+                        
+                        //Adiciona um atributo classificação no JSON de filmes e coloca os dados da classificação
+                        itemFilme.classificacao = dadosClassificacao.classificacao
+                        
+                        //Remover um atributo do JSON
+                        delete itemFilme.id_classificacao
+                        
+                        //Adiciona em um novo array o JSON de filmes com a sua nova estrutura de dados
+                        arrayFilmes.push(itemFilme)
+     
+                    }
+
+                    dadosFilme.films = arrayFilmes
+
+    /**/
 
                     return dadosFilme
                 }else{
@@ -170,7 +233,6 @@ const buscarFilme = async function (idFilme){
             }
         }
     }catch (error) {
-        console.log(error)
         return message.ERROR_INTERNAL_SERVER_CONTROLLER //500
 
     }

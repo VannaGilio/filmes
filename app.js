@@ -93,7 +93,7 @@ app.put('/v1/controle-filmes/filme/:id', cors(), bodyParserJSON, async function 
 })
 
 
-const controllerClassificacao = require('./controller/filme/controllerClassificacao')
+const controllerClassificacao = require('./controller/classificacao/controllerClassificacao')
 app.post('/v1/controle-filmes/classificacao', cors(), bodyParserJSON, async function(request, response) {
     let contentType = request.headers['content-type']
 
@@ -137,7 +137,7 @@ app.put('/v1/controle-filmes/classificacao/:id', cors(), bodyParserJSON, async f
     response.json(resultClassificacao)
 })
 
-const controllerGenero = require('./controller/filme/controllerGenero')
+const controllerGenero = require('./controller/genero/controllerGenero')
 app.post('/v1/controle-filmes/genero', cors(), bodyParserJSON, async function(request, response) {
     let contentType = request.headers['content-type']
 
@@ -181,7 +181,7 @@ app.put('/v1/controle-filmes/genero/:id', cors(), bodyParserJSON, async function
     response.json(resultGenero)
 })
 
-const controllerLinguagem = require('./controller/filme/controllerLinguagem')
+const controllerLinguagem = require('./controller/linguagem/controllerLinguagem')
 app.post('/v1/controle-filmes/linguagem', cors(), bodyParserJSON, async function(request, response) {
     let contentType = request.headers['content-type']
     
@@ -226,7 +226,7 @@ app.put('/v1/controle-filmes/linguagem/:id', cors(), bodyParserJSON, async funct
     response.json(resultLinguagem)
 })
 
-const controllerNacionalidade = require('./controller/filme/controllerNacionalidade')
+const controllerNacionalidade = require('./controller/nacionalidade/controllerNacionalidade')
 app.post('/v1/controle-filmes/nacionalidade', cors(), bodyParserJSON, async function(request, response) {
     let dadosBody = request.body
     let contentType = request.headers['content-type']
@@ -268,7 +268,7 @@ app.put('/v1/controle-filmes/nacionalidade/:id', cors(), bodyParserJSON, async f
     response.json(resultNacionalidade)
 })
 
-const controllerPlataforma = require('./controller/filme/controllerPlataforma')
+const controllerPlataforma = require('./controller/plataforma/controllerPlataforma')
 app.post('/v1/controle-filmes/plataforma', cors(), bodyParserJSON, async function(request, response) {
     let dadosBody = request.body
     let contentType = request.headers['content-type']
@@ -310,7 +310,7 @@ app.put('/v1/controle-filmes/plataforma/:id', cors(), bodyParserJSON, async func
     response.json(resultPlataforma)
 })
 
-const controllerSexo = require('./controller/filme/controllerSexo')
+const controllerSexo = require('./controller/sexo/controllerSexo')
 app.post('/v1/controle-filmes/sexo', cors(), bodyParserJSON, async function(request, response) {
     let dadosBody = request.body
     let contentType = request.headers['content-type']
@@ -352,31 +352,31 @@ app.put('/v1/controle-filmes/sexo/:id', cors(), bodyParserJSON, async function(r
     response.json(resultSexo)
 })
 
-const controllerTipoPremiacao = require('./controller/filme/controllerTipoPremiacao')
+const controllerFilmeGenero = require('./controller/tipoPremiacao/controllerTipoPremiacao')
 app.post('/v1/controle-filmes/tipopremiacao', cors(), bodyParserJSON, async function(request, response) {
     let dadosBody = request.body
     let contentType = request.headers['content-type']
-    let resultTipoPremiacao = await controllerTipoPremiacao.inserirTipoPremiacao(dadosBody,contentType)
+    let resultTipoPremiacao = await controllerFilmeGenero.inserirTipoPremiacao(dadosBody,contentType)
 
     response.status(resultTipoPremiacao.status_code)
     response.json(resultTipoPremiacao)
 })
 app.get('/v1/controle-filmes/tipopremiacao', cors(), bodyParserJSON, async function(request, response) {
-    let resultTipoPremiacao = await controllerTipoPremiacao.listarTipoPremicao()
+    let resultTipoPremiacao = await controllerFilmeGenero.listarTipoPremicao()
 
     response.status(resultTipoPremiacao.status_code)
     response.json(resultTipoPremiacao)
 })
 app.get('/v1/controle-filmes/tipopremiacao/:id', cors(), bodyParserJSON, async function(request, response) {
     let idTipoPremiacao = request.params.id
-    let resultTipoPremiacao = await controllerTipoPremiacao.buscarTipoPremiacao(idTipoPremiacao)
+    let resultTipoPremiacao = await controllerFilmeGenero.buscarTipoPremiacao(idTipoPremiacao)
 
     response.status(resultTipoPremiacao.status_code)
     response.json(resultTipoPremiacao)
 })
 app.delete('/v1/controle-filmes/tipopremiacao/:id', cors(), bodyParserJSON, async function(request, response) {
     let idTipoPremiacao = request.params.id
-    let resultTipoPremiacao = await controllerTipoPremiacao.excluirTipoPremiacao(idTipoPremiacao)
+    let resultTipoPremiacao = await controllerFilmeGenero.excluirTipoPremiacao(idTipoPremiacao)
 
     response.status(resultTipoPremiacao.status_code)
     response.json(resultTipoPremiacao)
@@ -388,7 +388,7 @@ app.put('/v1/controle-filmes/tipopremiacao/:id', cors(), bodyParserJSON, async f
 
     let dadosBody = request.body
     
-    let resultTipoPremiacao = await controllerTipoPremiacao.atualizarTipoPremiacao(idTipoPremiacao, dadosBody, contentType)
+    let resultTipoPremiacao = await controllerFilmeGenero.atualizarTipoPremiacao(idTipoPremiacao, dadosBody, contentType)
 
     response.status(resultTipoPremiacao.status_code)
     response.json(resultTipoPremiacao)
