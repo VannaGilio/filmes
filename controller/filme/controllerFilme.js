@@ -9,6 +9,7 @@
 const message = require('../../modulo/config')
 
 const filmeDAO = require('../../model/DAO/filme')
+const filmeGeneroDAO = require('../../model/DAO/filme_genero.js')
 
 //Import das controller necessárias para fazer os relacionamentos
 const controllerFilmeGenero = require('../filme/controllerFilmeGenero')
@@ -16,6 +17,7 @@ const controllerClassificacao = require('../classificacao/controllerClassificaca
 
 //Funcão para tratar a inserção de um novo filme no DAO ok
 const inserirFilme = async function (filme, contentType){
+    console.log(filme)
     try{
 
         if(String(contentType).toLowerCase() == 'application/json')
@@ -33,8 +35,22 @@ const inserirFilme = async function (filme, contentType){
             }else{
                 //Chama a função para inserir no BD e aguarda o retorno da função
                 let resultFilme = await filmeDAO.insertFilme(filme)
-        
+
                 if(resultFilme){
+                    if (filme.genero && Array.isArray(filme.genero)) {
+                        let filmeInserido = await filmeDAO.selectLastId()
+                        let idFilme = filmeInserido[0].id
+
+                        for (let genero of filme.genero) {
+                            if (genero.id_genero && !isNaN(genero.id_genero)) {
+                                let filmeGenero = {
+                                    id_filme: idFilme,
+                                    id_genero: genero.id_genero
+                                }
+                                await filmeGeneroDAO.insertFilmeGenero(filmeGenero)
+                            }
+                        }
+                    }
                     return message.SUCCESS_CREATED_ITEM //201
                 }else
                 return message.ERROR_INTERNAL_SERVER_MODEL //500
@@ -143,7 +159,6 @@ const listarFilme = async function (){
                 dadosFilme.status = true
                 dadosFilme.status_code = 200
                 dadosFilme.items = resultFilme.length
-                dadosFilme.films = resultFilme
 
                 //Percorrer o array de filmes para pegar cada ID de classificação
                 // e descobrir quais os dados da classificação
@@ -163,10 +178,10 @@ const listarFilme = async function (){
 
                     /* Monta o objeto de Generos para retornar no Filme (Relação NxN) */
                         //encaminha o id do filme para a controller retornar os generos associados a esse filme
-                        // let dadosGenero = await controllerFilmeGenero.buscarGeneroPorFilme(itemFilme.id)
-                        // console.log(dadosGenero)
-                        // //Adiciona um atributo genero no JSON de filmes e coloca os dados do genero
-                        // itemFilme.genero = dadosGenero.genero
+                        let dadosGenero = await controllerFilmeGenero.buscarGeneroPorFilme(itemFilme.id)
+                        console.log(dadosGenero)
+                        //Adiciona um atributo genero no JSON de filmes e coloca os dados do genero
+                        itemFilme.genero = dadosGenero.genero
 
                     //Adiciona em um novo array o JSON de filmes com a sua nova estrutura de dados
                     arrayFilmes.push(itemFilme)

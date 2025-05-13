@@ -56,6 +56,20 @@ create table tbl_linguagem(
     codigo_iso varchar(10) not null
 );
 
+create table tbl_filme_genero(
+    id_filme_genero int not null primary key auto_increment,
+    id_filme int not null,
+    id_genero int not null,
+
+    constraint FK_GENERO_FILME_GENERO
+    foreign key (id_genero)
+    references tbl_genero(id_genero),
+
+    constraint FK_FILME_FILME_GENERO
+    foreign key (id_filme) 
+    references tbl_filme(id)
+);
+
 show tables;
 
 desc tbl_filme;

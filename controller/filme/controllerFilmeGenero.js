@@ -8,8 +8,8 @@ const inserirFilmeGenero = async function(filmeGenero, contentType){
         if(String(contentType).toLowerCase() == 'application/json')
         {
                 if (
-                    filmeGenero.id          == ''           || filmeGenero.id == undefined    || filmeGenero.id == null || isNaN(filmeGenero.id)  || filmeGenero.id <=0 ||
-                    filmeGenero.id_genero   == ''           || filmeGenero.id_genero    == undefined    || filmeGenero.id_genero == null || isNaN(filmeGenero.id_genero) || filmeGenero.id_genero<=0
+                    filmeGenero.id_filme    == ''  || filmeGenero.id_filme     == undefined    || filmeGenero.id_filme  == null || isNaN(filmeGenero.id_filme)  || filmeGenero.id_filme <=0 ||
+                    filmeGenero.id_genero   == ''  || filmeGenero.id_genero    == undefined    || filmeGenero.id_genero == null || isNaN(filmeGenero.id_genero) || filmeGenero.id_genero<=0
                 )
                 {
                     return message.ERROR_REQUIRED_FIELDS //400
@@ -35,8 +35,8 @@ const atualizarFilmeGenero = async function(id, filmeGenero, contentType){
         if(String(contentType).toLowerCase() == 'application/json')
             {
                 if (id                          == ''           || id                     == undefined    || id                    == null || isNaN(id)  || id  <= 0   ||
-                    filmeGenero.id              == ''           || filmeGenero.id         == undefined    || filmeGenero.id        == null || isNaN(filmeGenero.id)  || filmeGenero.id <=0 ||
-                    filmeGenero.id_genero       == ''           || filmeGenero.id_genero  == undefined    || filmeGenero.id_genero == null || isNaN(filmeGenero.id_genero) || filmeGenero.id_genero<=0
+                    filmeGenero.id_filme        == ''           || filmeGenero.id_filme   == undefined    || filmeGenero.id_filme  == null || isNaN(filmeGenero.iid_filmed)  || filmeGenero.id <=0 ||
+                    filmeGenero.id_genero       == ''           || filmeGenero.id_genero  == undefined    || filmeGenero.id_genero == null || isNaN(filmeGenero.id_genero)   || filmeGenero.id_genero<=0
                 )
                 {
                     return message.ERROR_REQUIRED_FIELDS //400
@@ -190,11 +190,42 @@ const buscarGeneroPorFilme = async function(id){
     }
 }
 
+const buscarFilmePorGenero = async function(id){
+    try {
+        if(id == '' || id == undefined || id == null || isNaN(id) || id <=0){
+            return message.ERROR_REQUIRED_FIELDS //400
+        }else{
+            dadosFilme = {}
+
+            let resultgenero = await filmeGeneroDAO.selectFilmeByIdGenero (parseInt(id))
+            
+            if(resultgenero != false || typeof(resultgenero) == 'object'){
+                if(resultgenero.length > 0){
+                     //Criando um JSON de retorno de dados para a API
+                    dadosFilme.status = true
+                    dadosFilme.status_code = 200
+                    dadosFilme.genero = resultFilme
+
+                    return dadosgenero //200
+                }else{
+                    return message.ERROR_NOT_FOUND //404
+                }
+            }else{
+                return message.ERROR_INTERNAL_SERVER_MODEL //500
+            }
+        }
+
+    } catch (error) {
+        return message.ERROR_INTERNAL_SERVER_CONTROLLER //500
+    }
+}
+
 module.exports = {
     inserirFilmeGenero,
     atualizarFilmeGenero,
     excluirFilmeGenero,
     listarFilmeGenero,
     buscarFilmeGenero,
-    buscarGeneroPorFilme
+    buscarGeneroPorFilme,
+    buscarFilmePorGenero
 } 
