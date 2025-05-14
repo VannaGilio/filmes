@@ -9,12 +9,12 @@ const insertFilmeGenero = async function(filmeGenero){
   try {
 
       let sql = `insert into tbl_filme_genero  ( 
-                                          id,
+                                          id_filme,
                                           id_genero
                                         ) 
                                           values 
                                         (
-                                          ${filmeGenero.id},
+                                          ${filmeGenero.id_filme},
                                           ${filmeGenero.id_genero}
                                         )`
 
@@ -32,7 +32,7 @@ const insertFilmeGenero = async function(filmeGenero){
 }
 const updateFilmeGenero = async function(filmeGenero){
     try {
-        let sql = `update tbl_filme_genero set        id = ${filmeGenero.id},
+        let sql = `update tbl_filme_genero set        id_filme = ${filmeGenero.id_filme},
                                                       id_genero = ${filmeGenero.id_genero}
                                           
                               where id_filme_genero = ${filmeGenero.id_filme_genero}                
