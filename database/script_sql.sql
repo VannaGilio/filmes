@@ -98,20 +98,6 @@ create table tbl_filme_linguagem(
     references tbl_filme(id)
 );
 
-create table tbl_filme_linguagem(
-    id_filme_plataforma int not null primary key auto_increment,
-    id_filme int not null,
-    id_linguagem int not null,
-
-    constraint FK_LINGUAGEM_FILME_LINGUAGEM
-    foreign key (id_linguagem)
-    references tbl_linguagem(id_linguagem),
-
-    constraint FK_FILME_FILME_LINGUAGEM
-    foreign key (id_filme) 
-    references tbl_filme(id)
-);
-
 show tables;
 
 desc tbl_filme;

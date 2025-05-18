@@ -6,19 +6,22 @@
 ************************************************************************************/
 
 //Import do arquivo dee mensagens e status code do projeto
-const message = require('../../modulo/config')
+const message = require('../../modulo/config.js')
 
 const filmeDAO = require('../../model/DAO/filme/filme.js')
 const filmeGeneroDAO = require('../../model/DAO/filme/filme_genero.js')
+const filmePlataformaDAO = require('../../model/DAO/filme/filme_plataforma.js')
 
 //Import das controller necessárias para fazer os relacionamentos
 const controllerFilmeGenero = require('../filme/controllerFilmeGenero')
 const controllerClassificacao = require('../classificacao/controllerClassificacao.js')
+const controllerFilmePlataforma = require('../../controller/filme/controllerFilmePlataforma.js')
+const controllerFilmeLinguagem = require('../../controller/filme/controllerFilmeLinguagem.js')
+
 
 //Funcão para tratar a inserção de um novo filme no DAO ok
 const inserirFilme = async function (filme, contentType) {
     try {
-
         if (String(contentType).toLowerCase() == 'application/json') {
             if (filme.nome == '' || filme.nome == undefined || filme.nome == null || filme.nome.length > 80 ||
                 filme.nome == '' || filme.nome == undefined || filme.nome == null || filme.duracao.length > 5 ||
@@ -34,7 +37,8 @@ const inserirFilme = async function (filme, contentType) {
                 let resultFilme = await filmeDAO.insertFilme(filme)
 
                 if (resultFilme) {
-                    if (filme.genero && Array.isArray(filme.genero)) { //Verificando se chega o filme.genero e se ele é um arrau
+                    //Verificando se chega o filme.genero e se ele é um arrau
+                    if (filme.genero && Array.isArray(filme.genero)) {
                         let filmeInserido = await filmeDAO.selectLastId() //Pegando o ultimo id inserido
                         let idFilme = filmeInserido[0].id //vendo se volta id
 
@@ -47,10 +51,28 @@ const inserirFilme = async function (filme, contentType) {
                                 await filmeGeneroDAO.insertFilmeGenero(filmeGenero)
                             }
                         }
+
+                        if (filme.plataforma && Array.isArray(filme.plataforma)) {
+
+                            let filmeInserido = await filmeDAO.selectLastId()
+
+                            let idFilme = filmeInserido[0].id
+
+                            for (let plataforma of filme.plataforma) {
+                                if (plataforma.id_plataforma && !isNaN(plataforma.id_plataforma)) {
+                                    let filmePlataforma = {
+                                        id_filme: idFilme,
+                                        id_plataforma: plataforma.id_plataforma
+                                    }
+                                    await filmePlataformaDAO.insertFilmePlataforma(filmePlataforma)
+                                }
+                            }
+                        }
+                        return message.SUCCESS_CREATED_ITEM //201
+                    } else {
+                        return message.ERROR_INTERNAL_SERVER_MODEL //500
                     }
-                    return message.SUCCESS_CREATED_ITEM //201
-                } else
-                    return message.ERROR_INTERNAL_SERVER_MODEL //500
+                }
             }
         } else {
             return message.ERROR_CONTENT_TYPE //415
@@ -174,6 +196,12 @@ const listarFilme = async function () {
                     itemFilme.genero = dadosGenero.genero
                     //delete itemFilme.id_genero
 
+                    let dadosPlataforma = await controllerFilmePlataforma.buscarPlataformaPorFilme(itemFilme.id)
+                    itemFilme.plataforma = dadosPlataforma.plataforma
+
+                    let dadosLinguagem = await controllerFilmeLinguagem.buscarLinguagemPorFilme(itemFilme.id)
+                    itemFilme.linguagem = dadosLinguagem.linguagem
+
                     //Adiciona em um novo array o JSON de filmes com a sua nova estrutura de dados
                     arrayFilmes.push(itemFilme)
                     console.log(itemFilme)
@@ -181,8 +209,8 @@ const listarFilme = async function () {
 
                 dadosFilme.films = arrayFilmes
 
-                return dadosFilme 
-                
+                return dadosFilme
+
             } else {
                 return message.ERROR_NOT_FOUND //404
             }
@@ -216,12 +244,16 @@ const buscarFilme = async function (idFilme) {
                         let dadosClassificacao = await controllerClassificacao.buscarClassificacao(itemFilme.id_classificacao)
                         //Adiciona um atributo classificação no JSON de filmes e coloca os dados da classificação
                         itemFilme.classificacao = dadosClassificacao.classificacao
-                        //Remover um atributo do JSON
                         delete itemFilme.id_classificacao
 
                         let dadosGenero = await controllerFilmeGenero.buscarGeneroPorFilme(itemFilme.id)
-                        //Adiciona um atributo genero no JSON de filmes e coloca os dados do genero
                         itemFilme.genero = dadosGenero.genero
+
+                        let dadosPlataforma = await controllerFilmePlataforma.buscarPlataformaPorFilme(itemFilme.id)
+                        itemFilme.plataforma = dadosPlataforma.plataforma
+
+                        let dadosLinguagem = await controllerFilmeLinguagem.buscarLinguagemPorFilme(itemFilme.id)
+                        itemFilme.linguagem = dadosLinguagem.linguagem
 
                         //Adiciona em um novo array o JSON de filmes com a sua nova estrutura de dados
                         arrayFilmes.push(itemFilme)

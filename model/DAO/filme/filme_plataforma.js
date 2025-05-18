@@ -76,10 +76,53 @@ const selectByIdFilmePlataforma = async function (id_filme_plataforma) {
     }
 }
 
+
+const selectFilmeByIdPlataforma = async function(idPlataforma){
+    try {
+        let sql = `select tbl_filme.* from tbl_filme 
+                                              inner join tbl_filme_plataforma
+                                                on tbl_filme.id = tbl_filme_plataforma.id_filme
+                                              inner join tbl_plataforma
+                                                on tbl_plataforma.id_plataforma = tbl_filme_plataforma.id_plataforma
+                    where tbl_filme_plataforma.id_plataforma = ${idPlataforma}`
+  
+        let result = await prisma.$queryRawUnsafe(sql)
+  
+      if (result)
+          return result
+      else 
+          return false
+    } catch (error) {
+        return false
+    }
+}
+
+const selectPlataformaByIdFilme = async function(idFilme){
+    try {
+         let sql = `select tbl_plataforma.* from tbl_filme 
+                                               inner join tbl_filme_plataforma
+                                                 on tbl_filme.id = tbl_filme_plataforma.id_filme
+                                               inner join tbl_plataforma
+                                                 on tbl_plataforma.id_plataforma = tbl_filme_plataforma.id_plataforma
+                     where tbl_filme_plataforma.id_filme = ${idFilme}`
+                     
+        let result = await prisma.$queryRawUnsafe(sql)
+   
+    if (result)
+        return result
+    else 
+        return false
+    } catch (error) {
+        return false
+    }
+}
+
 module.exports = {
     insertFilmePlataforma,
     updateFilmePlataforma,
     deleteFilmePlataforma,
     selectAllFilmePlataforma,
-    selectByIdFilmePlataforma
+    selectByIdFilmePlataforma,
+    selectFilmeByIdPlataforma,
+    selectPlataformaByIdFilme
 }

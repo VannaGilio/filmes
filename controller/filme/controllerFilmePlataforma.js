@@ -1,21 +1,21 @@
 //Import do arquivo dee mensagens e status code do projeto
 const message = require('../../modulo/config.js')
 
-const filmeGeneroDAO = require('../../model/DAO/filme/filme_genero.js')
+const filmePlataformaDAO = require('../../model/DAO/filme/filme_plataforma.js')
 
-const inserirFilmeGenero = async function (filmeGenero, contentType) {
+const inserirFilmePlataforma = async function (filmePlataforma, contentType) {
     try {
         if (String(contentType).toLowerCase() == 'application/json') {
             if (
-                filmeGenero.id_filme == '' || filmeGenero.id_filme == undefined || filmeGenero.id_filme == null || isNaN(filmeGenero.id_filme) || filmeGenero.id_filme <= 0 ||
-                filmeGenero.id_genero == '' || filmeGenero.id_genero == undefined || filmeGenero.id_genero == null || isNaN(filmeGenero.id_genero) || filmeGenero.id_genero <= 0
+                filmePlataforma.id_filme == '' || filmePlataforma.id_filme == undefined || filmePlataforma.id_filme == null || isNaN(filmePlataforma.id_filme) || filmePlataforma.id_filme <= 0 ||
+                filmePlataforma.id_plataforma == '' || filmePlataforma.id_plataforma == undefined || filmePlataforma.id_plataforma == null || isNaN(filmePlataforma.id_plataforma) || filmePlataforma.id_plataforma <= 0
             ) {
                 return message.ERROR_REQUIRED_FIELDS //400
             } else {
                 //Chama a função para inserir no BD e aguarda o retorno da função
-                let resultgenero = await filmeGeneroDAO.insertFilmeGenero(filmeGenero)
+                let resultPlataforma = await filmePlataformaDAO.insertFilmePlataforma(filmePlataforma)
 
-                if (resultgenero)
+                if (resultPlataforma)
                     return message.SUCCESS_CREATED_ITEM //201
                 else
                     return message.ERROR_INTERNAL_SERVER_MODEL //500
@@ -28,25 +28,25 @@ const inserirFilmeGenero = async function (filmeGenero, contentType) {
     }
 }
 
-const atualizarFilmeGenero = async function (id, filmeGenero, contentType) {
+const atualizarFilmePlataforma = async function (id, filmePlataforma, contentType) {
     try {
         if (String(contentType).toLowerCase() == 'application/json') {
             if (id == '' || id == undefined || id == null || isNaN(id) || id <= 0 ||
-                filmeGenero.id_filme == '' || filmeGenero.id_filme == undefined || filmeGenero.id_filme == null || isNaN(filmeGenero.id_filme) || filmeGenero.id <= 0 ||
-                filmeGenero.id_genero == '' || filmeGenero.id_genero == undefined || filmeGenero.id_genero == null || isNaN(filmeGenero.id_genero) || filmeGenero.id_genero <= 0
+                filmePlataforma.id_filme == '' || filmePlataforma.id_filme == undefined || filmePlataforma.id_filme == null || isNaN(filmePlataforma.id_filme) || filmePlataforma.id <= 0 ||
+                filmePlataforma.id_plataforma == '' || filmePlataforma.id_plataforma == undefined || filmePlataforma.id_plataforma == null || isNaN(filmePlataforma.id_plataforma) || filmePlataforma.id_plataforma <= 0
             ) {
                 return message.ERROR_REQUIRED_FIELDS //400
             } else {
                 //Validação para verificar se o ID existe no BD
-                let resultgenero = await filmeGeneroDAO.selectByIdFilmeGenero(parseInt(id))
+                let resultPlataforma = await filmePlataformaDAO.selectByIdFilmePlataforma(parseInt(id))
 
-                if (resultgenero != false || typeof (resultgenero) == 'object') {
-                    if (resultgenero.length > 0) {
+                if (resultPlataforma != false || typeof (resultPlataforma) == 'object') {
+                    if (resultPlataforma.length > 0) {
                         //Update
                         //Adiciona o ID do genero no JSON com os dados
-                        genero.id_genero = parseInt(id)
+                        plataforma.id_plataforma = parseInt(id)
 
-                        let result = await filmeGeneroDAO.updateGenero(filmeGenero)
+                        let result = await filmePlataformaDAO.updateFilmePlataforma(filmePlataforma)
 
                         if (result) {
                             return message.SUCCESS_UPDATED_ITEM //200
@@ -67,20 +67,20 @@ const atualizarFilmeGenero = async function (id, filmeGenero, contentType) {
         return message.ERROR_INTERNAL_SERVER_CONTROLLER //500
     }
 }
-const excluirFilmeGenero = async function (id) {
+const excluirFilmePlataforma = async function (id) {
     try {
         if (id == '' || id == undefined || id == null || isNaN(id) || id <= 0) {
             return message.ERROR_REQUIRED_FIELDS //400
         } else {
 
             //Funcção que verifica se  ID existe no BD
-            let resultgenero = await filmeGeneroDAO.selectByIdFilmeGenero(parseInt(id))
+            let resultPlataforma = await filmePlataformaDAO.selectByIdFilmePlataforma(parseInt(id))
 
-            if (resultgenero != false || typeof (resultgenero) == 'object') {
+            if (resultPlataforma != false || typeof (resultPlataforma) == 'object') {
                 //Se existir, faremos o delete
-                if (resultgenero.length > 0) {
+                if (resultPlataforma.length > 0) {
                     //delete
-                    let result = await filmeGeneroDAO.deleteFilmeGenero(parseInt(id))
+                    let result = await filmePlataformaDAO.deleteFilmePlataforma(parseInt(id))
 
                     if (result) {
                         return message.SUCCESS_DELETED_ITEM //200
@@ -99,22 +99,22 @@ const excluirFilmeGenero = async function (id) {
     }
 }
 
-const listarFilmeGenero = async function () {
+const listarFilmePlataforma = async function () {
     try {
         //Objeto do tipo JSON
-        let dadosgenero = {}
+        let dadosPlataforma = {}
         //Chama a função para retornar os generos cadastrados
-        let resultgenero = await filmeGeneroDAO.selectAllFilmeGenero()
+        let resultPlataforma = await filmePlataformaDAO.selectAllFilmePlataforma()
 
-        if (resultgenero != false || typeof (resultgenero) == 'object') {
-            if (resultgenero.length > 0) {
+        if (resultPlataforma != false || typeof (resultPlataforma) == 'object') {
+            if (resultPlataforma.length > 0) {
                 //Criando um JSON de retorno de dados para a API
-                dadosgenero.status = true
-                dadosgenero.status_code = 200
-                dadosgenero.items = resultgenero.length
-                dadosgenero.films = resultgenero
+                dadosPlataforma.status = true
+                dadosPlataforma.status_code = 200
+                dadosPlataforma.items = resultPlataforma.length
+                dadosPlataforma.films = resultPlataforma
 
-                return dadosgenero
+                return dadosPlataforma
             } else {
                 return message.ERROR_NOT_FOUND //404
             }
@@ -126,23 +126,23 @@ const listarFilmeGenero = async function () {
     }
 }
 
-const buscarFilmeGenero = async function (id) {
+const buscarFilmePlataforma = async function (id) {
     try {
         if (id == '' || id == undefined || id == null || isNaN(id) || id <= 0) {
             return message.ERROR_REQUIRED_FIELDS //400
         } else {
-            let dadosgenero = {}
+            let dadosPlataforma = {}
 
-            let resultgenero = await filmeGeneroDAO.selectByIdFilmeGenero(parseInt(id))
+            let resultPlataforma = await filmePlataformaDAO.selectByIdFilmePlataforma(parseInt(id))
 
-            if (resultgenero != false || typeof (resultgenero) == 'object') {
-                if (resultgenero.length > 0) {
+            if (resultPlataforma != false || typeof (resultPlataforma) == 'object') {
+                if (resultPlataforma.length > 0) {
                     //Criando um JSON de retorno de dados para a API
-                    dadosgenero.status = true
-                    dadosgenero.status_code = 200
-                    dadosgenero.genero = resultgenero
+                    dadosPlataforma.status = true
+                    dadosPlataforma.status_code = 200
+                    dadosPlataforma.plataforma = resultPlataforma
 
-                    return dadosgenero //200
+                    return dadosPlataforma //200
                 } else {
                     return message.ERROR_NOT_FOUND //404
                 }
@@ -156,23 +156,23 @@ const buscarFilmeGenero = async function (id) {
     }
 }
 
-const buscarGeneroPorFilme = async function (id) {
+const buscarPlataformaPorFilme = async function (id) {
     try {
         if (id == '' || id == undefined || id == null || isNaN(id) || id <= 0) {
             return message.ERROR_REQUIRED_FIELDS //400
         } else {
-            let dadosgenero = {}
+            let dadosPlataforma = {}
 
-            let resultgenero = await filmeGeneroDAO.selectGeneroByIdFilme(parseInt(id))
+            let resultPlataforma = await filmePlataformaDAO.selectPlataformaByIdFilme(parseInt(id))
 
-            if (resultgenero != false || typeof (resultgenero) == 'object') {
-                if (resultgenero.length > 0) {
+            if (resultPlataforma != false || typeof (resultPlataforma) == 'object') {
+                if (resultPlataforma.length > 0) {
                     //Criando um JSON de retorno de dados para a API
-                    dadosgenero.status = true
-                    dadosgenero.status_code = 200
-                    dadosgenero.genero = resultgenero
+                    dadosPlataforma.status = true
+                    dadosPlataforma.status_code = 200
+                    dadosPlataforma.plataforma = resultPlataforma
 
-                    return dadosgenero //200
+                    return dadosPlataforma //200
                 } else {
                     return message.ERROR_NOT_FOUND //404
                 }
@@ -185,23 +185,24 @@ const buscarGeneroPorFilme = async function (id) {
     }
 }
 
-const buscarFilmePorGenero = async function (id) {
+const buscarFilmePorPlataforma = async function (id) {
     try {
         if (id == '' || id == undefined || id == null || isNaN(id) || id <= 0) {
             return message.ERROR_REQUIRED_FIELDS //400
         } else {
             let dadosFilme = {}
 
-            let resultgenero = await filmeGeneroDAO.selectFilmeByIdGenero(parseInt(id))
+            let resultPlataforma = await filmePlataformaDAO.selectFilmeByIdPlataforma(parseInt(id))
 
-            if (resultgenero != false || typeof (resultgenero) == 'object') {
-                if (resultgenero.length > 0) {
+            if (resultPlataforma != false || typeof (resultPlataforma) == 'object') {
+                if (resultPlataforma.length > 0) {
                     //Criando um JSON de retorno de dados para a API
                     dadosFilme.status = true
                     dadosFilme.status_code = 200
-                    dadosFilme.genero = resultFilme
+                    dadosPlataforma.plataforma = resultPlataforma
 
-                    return dadosFilme //201
+
+                    return dadosFilme //200
                 } else {
                     return message.ERROR_NOT_FOUND //404
                 }
@@ -216,11 +217,11 @@ const buscarFilmePorGenero = async function (id) {
 }
 
 module.exports = {
-    inserirFilmeGenero,
-    atualizarFilmeGenero,
-    excluirFilmeGenero,
-    listarFilmeGenero,
-    buscarFilmeGenero,
-    buscarGeneroPorFilme,
-    buscarFilmePorGenero
+    inserirFilmePlataforma,
+    atualizarFilmePlataforma,
+    excluirFilmePlataforma,
+    listarFilmePlataforma,
+    buscarFilmePlataforma,
+    buscarFilmePorPlataforma,
+    buscarPlataformaPorFilme
 } 
