@@ -11,6 +11,8 @@ const message = require('../../modulo/config.js')
 const filmeDAO = require('../../model/DAO/filme/filme.js')
 const filmeGeneroDAO = require('../../model/DAO/filme/filme_genero.js')
 const filmePlataformaDAO = require('../../model/DAO/filme/filme_plataforma.js')
+const filmeLinguagemDAO = require('../../model/DAO/filme/filme_linguagem.js')
+
 
 //Import das controller necessárias para fazer os relacionamentos
 const controllerFilmeGenero = require('../filme/controllerFilmeGenero')
@@ -29,7 +31,8 @@ const inserirFilme = async function (filme, contentType) {
                 filme.data_lancamento == '' || filme.data_lancamento == undefined || filme.data_lancamento == null || filme.data_lancamento.length > 10 ||
                 filme.foto_capa.length > 200 || filme.foto_capa == undefined ||
                 filme.link_trailer.length > 200 || filme.link_trailer == undefined ||
-                filme.id_classificacao == '' || filme.id_classificacao == undefined
+                filme.id_classificacao == '' || filme.id_classificacao == undefined || filme.id_classificacao == null || filme.id_classificacao <0
+
             ) {
                 return message.ERROR_REQUIRED_FIELDS //400
             } else {
@@ -68,6 +71,24 @@ const inserirFilme = async function (filme, contentType) {
                                 }
                             }
                         }
+
+                        if (filme.linguagem && Array.isArray(filme.linguagem)) {
+
+                            let filmeInserido = await filmeDAO.selectLastId()
+
+                            let idFilme = filmeInserido[0].id
+
+                            for (let linguagem of filme.linguagem) {
+                                if (linguagem.id_linguagem && !isNaN(linguagem.id_linguagem)) {
+                                    let filmeLinguagem = {
+                                        id_filme: idFilme,
+                                        id_linguagem: linguagem.id_linguagem
+                                    }
+                                    await filmeLinguagemDAO.insertFilmeLinguagem(filmeLinguagem)
+                                }
+                            }
+                        }
+
                         return message.SUCCESS_CREATED_ITEM //201
                     } else {
                         return message.ERROR_INTERNAL_SERVER_MODEL //500

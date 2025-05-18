@@ -98,6 +98,11 @@ create table tbl_filme_linguagem(
     references tbl_filme(id)
 );
 
+create table tbl_premiacao(
+    id_premiacao int not null primary key auto_increment,
+    nome_premiacao varchar(100) not null
+);
+
 show tables;
 
 desc tbl_filme;
@@ -110,3 +115,9 @@ ADD id_classificacao INT,
 ADD CONSTRAINT fk_classificacao_filme
     FOREIGN KEY (id_classificacao)
     REFERENCES tbl_classificacao(id_classificacao);
+
+ALTER TABLE tbl_tipo_premiacao
+ADD id_premiacao INT,
+ADD CONSTRAINT FK_PREMIACAO_TIPOPREMIACAO
+    FOREIGN KEY (id_premiacao)
+    REFERENCES tbl_premiacao(id_premiacao);

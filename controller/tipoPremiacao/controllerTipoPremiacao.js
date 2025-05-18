@@ -1,12 +1,14 @@
 //Import do arquivo dee mensagens e status code do projeto
 const message = require('../../modulo/config')
 
-const tipoPremiacaoDAO = require('../../model/DAO/tipoPremiacao')
+const tipoPremiacaoDAO = require('../../model/DAO/premiacao/tipoPremiacao.js')
+const controllerPremiacao = require('../tipoPremiacao/controllerPremiacao.js')
 
 const inserirTipoPremiacao = async function (tipoPremiacao, contentType) {
     try {
         if (String(contentType).toLowerCase() == 'application/json') {
-            if (tipoPremiacao.tipo_premiacao == '' || tipoPremiacao.tipo_premiacao == undefined || tipoPremiacao.tipo_premiacao == null || tipoPremiacao.tipo_premiacao > 100
+            if (tipoPremiacao.tipo_premiacao == '' || tipoPremiacao.tipo_premiacao == undefined || tipoPremiacao.tipo_premiacao == null || tipoPremiacao.tipo_premiacao > 100 ||
+                tipoPremiacao.id_premiacao == null || tipoPremiacao.id_premiacao == undefined || tipoPremiacao.id_premiacao < 0 || tipoPremiacao.id_premiacao == ""
             ) {
                 return message.ERROR_REQUIRED_FIELDS //400
             } else {
@@ -30,7 +32,8 @@ const atualizarTipoPremiacao = async function (id, tipoPremiacao, contentType) {
     try {
         if (String(contentType).toLowerCase() == 'application/json') {
             if (id == '' || id == undefined || id == null || isNaN(id) || id <= 0 ||
-                tipoPremiacao.tipo_premiacao == '' || tipoPremiacao.tipo_premiacao == undefined || tipoPremiacao.tipo_premiacao == null || tipoPremiacao.tipo_premiacao.length > 100
+                tipoPremiacao.tipo_premiacao == '' || tipoPremiacao.tipo_premiacao == undefined || tipoPremiacao.tipo_premiacao == null || tipoPremiacao.tipo_premiacao.length > 100 ||
+                tipoPremiacao.id_premiacao == null || tipoPremiacao.id_premiacao == undefined || tipoPremiacao.id_premiacao < 0 || tipoPremiacao.id_premiacao == ""
             ) {
                 return message.ERROR_REQUIRED_FIELDS //400
             } else {
@@ -70,7 +73,7 @@ const excluirTipoPremiacao = async function (id) {
         } else {
 
             //função que verifica se ID existe no BD
-            let resultTipoPremiacao = await tipoPremiacaoDAO.selectAllTipoPremiacao(parseInt(id))
+            let resultTipoPremiacao = await tipoPremiacaoDAO.selectByIdTipoPremiacao(parseInt(id))
 
             if (resultTipoPremiacao != false || typeof (resultTipoPremiacao) == 'object') {
                 //se exestir, faremos o delete
@@ -97,31 +100,39 @@ const excluirTipoPremiacao = async function (id) {
 }
 
 const listarTipoPremicao = async function () {
-      try {
-            //Objeto do tipo JSON
-            let dadosTipoPremiacao = {}
-    
-            //Chama a função para retornar os filmes cadastrados
-            let resultTipoPremiacao = await tipoPremiacaoDAO.selectAllTipoPremiacao()
-            
-            if(resultTipoPremiacao != false || typeof(resultTipoPremiacao) == 'object'){
-                if(resultTipoPremiacao.length > 0){
-                    //Criando um JSON de retorno de dados para a API
-                    dadosTipoPremiacao.status = true
-                    dadosTipoPremiacao.status_code = 200
-                    dadosTipoPremiacao.items = resultTipoPremiacao.length
-                    dadosTipoPremiacao.tipoPremiacao = resultTipoPremiacao
-    
-                    return dadosTipoPremiacao
-                }else{
-                    return message.ERROR_NOT_FOUND //404
+    try {
+        //Objeto do tipo JSON
+        let dadosTipoPremiacao = {}
+        let arrayFilmes = []
+
+        //Chama a função para retornar os filmes cadastrados
+        let resultTipoPremiacao = await tipoPremiacaoDAO.selectAllTipoPremiacao()
+
+        if (resultTipoPremiacao != false || typeof (resultTipoPremiacao) == 'object') {
+            if (resultTipoPremiacao.length > 0) {
+                //Criando um JSON de retorno de dados para a API
+                dadosTipoPremiacao.status = true
+                dadosTipoPremiacao.status_code = 200
+                dadosTipoPremiacao.items = resultTipoPremiacao.length
+                dadosTipoPremiacao.tipoPremiacao = resultTipoPremiacao
+
+                for (const itemFilme of resultFilme) {
+                    let dadosPremiacao = await controllerPremiacao.buscarPremiacao(itemFilme.id_premiacao)
+                    itemFilme.premiacao = dadosPremiacao.premiacao
+                    delete itemFilme.id_premiacao
                 }
-            }else{
-                return message.ERROR_INTERNAL_SERVER_MODEL //500
+                dadosTipoPremiacao.films = arrayFilmes
+                
+                return dadosTipoPremiacao
+            } else {
+                return message.ERROR_NOT_FOUND //404
             }
-        } catch (error) {
-            return message.ERROR_INTERNAL_SERVER_CONTROLLER //500
+        } else {
+            return message.ERROR_INTERNAL_SERVER_MODEL //500
         }
+    } catch (error) {
+        return message.ERROR_INTERNAL_SERVER_CONTROLLER //500
+    }
 }
 
 const buscarTipoPremiacao = async function (id) {
