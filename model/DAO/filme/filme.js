@@ -72,6 +72,10 @@ const updateFilme = async function (filme) {
 //EXCLUIR UM FILME EXISTENTE
 const deleteFilme = async function (id) {
     try {
+
+        let deleteRelation = `delete from tbl_filme_genero where id_filme = ${id}`
+        await prisma.$executeRawUnsafe(deleteRelation)//Deletar relações da filme genero para poder excluir o filme 
+
         let sql = `delete from tbl_filme where id = ${id}`
         let result = await prisma.$executeRawUnsafe(sql)
 
@@ -80,6 +84,7 @@ const deleteFilme = async function (id) {
         else
             return false
     } catch (error) {
+        console.log(error)
         return false
     }
 }

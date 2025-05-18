@@ -8,8 +8,8 @@
 //Import do arquivo dee mensagens e status code do projeto
 const message = require('../../modulo/config')
 
-const filmeDAO = require('../../model/DAO/filme')
-const filmeGeneroDAO = require('../../model/DAO/filme_genero.js')
+const filmeDAO = require('../../model/DAO/filme/filme.js')
+const filmeGeneroDAO = require('../../model/DAO/filme/filme_genero.js')
 
 //Import das controller necessárias para fazer os relacionamentos
 const controllerFilmeGenero = require('../filme/controllerFilmeGenero')
@@ -157,7 +157,6 @@ const listarFilme = async function () {
                 //Percorrer o array de filmes para pegar cada ID de classificação
                 // e descobrir quais os dados da classificação
 
-                // resultFilme.forEach( async function(itemFilme){
                 //Precisamos utilizar o for of, pois o foreach não consegue trabalhar com 
                 // requisições async com await
 
@@ -171,16 +170,19 @@ const listarFilme = async function () {
                     delete itemFilme.id_classificacao
 
                     //n/n
-                    let dadosGenero = await controllerFilmeGenero.buscarGeneroPorFilme(itemFilme.id_filme)
+                    let dadosGenero = await controllerFilmeGenero.buscarGeneroPorFilme(itemFilme.id)
                     itemFilme.genero = dadosGenero.genero
+                    //delete itemFilme.id_genero
 
                     //Adiciona em um novo array o JSON de filmes com a sua nova estrutura de dados
                     arrayFilmes.push(itemFilme)
+                    console.log(itemFilme)
                 }
 
                 dadosFilme.films = arrayFilmes
 
-                return dadosFilme
+                return dadosFilme 
+                
             } else {
                 return message.ERROR_NOT_FOUND //404
             }
@@ -217,7 +219,7 @@ const buscarFilme = async function (idFilme) {
                         //Remover um atributo do JSON
                         delete itemFilme.id_classificacao
 
-                        let dadosGenero = await controllerFilmeGenero.buscarGeneroPorFilme(itemFilme.id_filme)
+                        let dadosGenero = await controllerFilmeGenero.buscarGeneroPorFilme(itemFilme.id)
                         //Adiciona um atributo genero no JSON de filmes e coloca os dados do genero
                         itemFilme.genero = dadosGenero.genero
 
@@ -249,38 +251,3 @@ module.exports = {
     listarFilme,
     buscarFilme
 }
-
-
-// {
-//     "status": true,
-//     "status_code": 200,
-//     "items": 1,
-//     "films": [
-//         {
-//             "id": 3,
-//             "nome": "10 Coisas que eu odeio em você",
-//             "duracao": "1970-01-01T02:20:00.000Z",
-//             "sinopse": "romance",
-//             "data_lancamento": "2012-02-16T00:00:00.000Z",
-//             "foto_capa": "http://foto.jpg",
-//             "link_trailer": "http://link.mp4",
-//             "classificacao": [
-//                 {
-//                     "id_classificacao": 1,
-//                     "faixa_etaria": "12",
-//                     "link_icone_classificacao": "http://icone12.jpg"
-//                 }
-//             ],
-//             "genero": [
-//                 {
-//                     "id_genero": 1,
-//                     "genero": "Ação"
-//                 },
-//                 {
-//                     "id_genero": 2,
-//                     "genero": "Terror"
-//                 },
-//             ]
-//         }
-//     ]
-// }

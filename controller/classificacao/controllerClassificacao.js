@@ -1,4 +1,4 @@
-//Import do arquivo dee mensagens e status code do projeto
+''//Import do arquivo dee mensagens e status code do projeto
 const message = require('../../modulo/config')
 
 const classificacaoDAO = require('../../model/DAO/classificacao')
