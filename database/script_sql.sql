@@ -158,6 +158,19 @@ create table tbl_nacionalidade_ator(
     references tbl_nacionalidade(id_nacionalidade)
 );
 
+create table tbl_filme_ator(
+    id_filme_ator int not null primary key auto_increment,
+    id_ator int not null,
+    id_filme int not null,
+
+    constraint FK_ATOR_FILME_ATOR
+    foreign key (id_ator)
+    references tbl_ator(id_ator),
+
+    constraint FK_FILME_FILME_ATOR
+    foreign key (id_filme) 
+    references tbl_filme(id)
+);
 
 show tables;
 
@@ -182,3 +195,9 @@ ADD CONSTRAINT FK_PREMIACAO_TIPOPREMIACAO
 DROP TABLE tbl_premiacao;
 ALTER TABLE tbl_tipo_premiacao DROP FOREIGN KEY FK_PREMIACAO_TIPOPREMIACAO;
 DROP TABLE tbl_tipo_premiacao;
+
+ALTER TABLE tbl_filme_ator
+ADD id_ator INT,
+ADD CONSTRAINT fk_ator_filme_ator
+    FOREIGN KEY (id_ator)
+    REFERENCES tbl_ator(id_ator);

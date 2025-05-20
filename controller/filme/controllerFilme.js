@@ -13,7 +13,7 @@ const filmeGeneroDAO = require('../../model/DAO/filme/filme_genero.js')
 const filmePlataformaDAO = require('../../model/DAO/filme/filme_plataforma.js')
 const filmeLinguagemDAO = require('../../model/DAO/filme/filme_linguagem.js')
 const filmeTipoPremiacaoDAO = require('../../model/DAO/filme/filme_tipo_premiacao.js')
-
+const filmeAtorDAO = require('../../model/DAO/filme/filme_ator.js')
 
 //Import das controller necessárias para fazer os relacionamentos
 const controllerFilmeGenero = require('../filme/controllerFilmeGenero')
@@ -21,7 +21,7 @@ const controllerClassificacao = require('../classificacao/controllerClassificaca
 const controllerFilmePlataforma = require('../../controller/filme/controllerFilmePlataforma.js')
 const controllerFilmeLinguagem = require('../../controller/filme/controllerFilmeLinguagem.js')
 const controllerFilmeTipoPremiacao = require('../../controller/filme/controllerFilmeTipoPremiacao.js')
-
+const controllerFilmeAtor = require('../../controller/filme/controllerFilmeAtor.js')
 
 //Funcão para tratar a inserção de um novo filme no DAO ok
 const inserirFilme = async function (filme, contentType) {
@@ -33,7 +33,7 @@ const inserirFilme = async function (filme, contentType) {
                 filme.data_lancamento == '' || filme.data_lancamento == undefined || filme.data_lancamento == null || filme.data_lancamento.length > 10 ||
                 filme.foto_capa.length > 200 || filme.foto_capa == undefined ||
                 filme.link_trailer.length > 200 || filme.link_trailer == undefined ||
-                filme.id_classificacao == '' || filme.id_classificacao == undefined || filme.id_classificacao == null || filme.id_classificacao <0
+                filme.id_classificacao == '' || filme.id_classificacao == undefined || filme.id_classificacao == null || filme.id_classificacao < 0
 
             ) {
                 return message.ERROR_REQUIRED_FIELDS //400
@@ -98,6 +98,21 @@ const inserirFilme = async function (filme, contentType) {
                                         id_tipo_premiacao: premiacao.id_tipo_premiacao
                                     }
                                     await filmeTipoPremiacaoDAO.insertFilmeTipoPremiacao(filmePremiacao)
+                                }
+                            }
+                        }
+
+                        if (filme.ator && Array.isArray(filme.ator)) {
+                            let filmeInserido = await filmeDAO.selectLastId()
+                            let idFilme = filmeInserido[0].id
+
+                            for (let ator of filme.ator) {
+                                if (ator.id_tipo_ator && !isNaN(ator.id_tipo_ator)) {
+                                    let filmeAtor = {
+                                        id_filme: idFilme,
+                                        id_tipo_ator: ator.id_tipo_ator
+                                    }
+                                    await filmeAtorDAO.insertFilmeAtor(filmeAtor)
                                 }
                             }
                         }
@@ -240,9 +255,12 @@ const listarFilme = async function () {
                     let dadosPremiacao = await controllerFilmeTipoPremiacao.buscarTipoPremiacaoPorFilme(itemFilme.id)
                     itemFilme.premiacao = dadosPremiacao.premiacao
 
+                    let dadosAtor = await controllerFilmeAtor.buscarAtorPorFilme(itemFilme.id)
+                    itemFilme.ator = dadosAtor.ator
+
                     //Adiciona em um novo array o JSON de filmes com a sua nova estrutura de dados
                     arrayFilmes.push(itemFilme)
-                    console.log(itemFilme)
+                    //console.log(itemFilme)
                 }
 
                 dadosFilme.films = arrayFilmes
@@ -295,6 +313,9 @@ const buscarFilme = async function (idFilme) {
 
                         let dadosPremiacao = await controllerFilmeTipoPremiacao.buscarTipoPremiacaoPorFilme(itemFilme.id)
                         itemFilme.premiacao = dadosPremiacao.premiacao
+
+                        let dadosAtor = await controllerFilmeAtor.buscarAtorPorFilme(itemFilme.id)
+                        itemFilme.ator = dadosAtor.ator
 
                         //Adiciona em um novo array o JSON de filmes com a sua nova estrutura de dados
                         arrayFilmes.push(itemFilme)

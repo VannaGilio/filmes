@@ -119,7 +119,7 @@ const listarAtor = async function () {
                 dadosAtor.status = true
                 dadosAtor.status_code = 200
                 dadosAtor.items = resultAtor.length
-                dadosAtor.sexo = resultAtor
+                dadosAtor.ator = resultAtor
 
                 for (const itemAtor of resultAtor) {
 
