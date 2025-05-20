@@ -116,7 +116,7 @@ const listarTipoPremicao = async function () {
                 dadosTipoPremiacao.items = resultTipoPremiacao.length
                 dadosTipoPremiacao.tipoPremiacao = resultTipoPremiacao
 
-                for (const itemFilme of resultFilme) {
+                for (const itemFilme of resultTipoPremiacao) {
                     let dadosPremiacao = await controllerPremiacao.buscarPremiacao(itemFilme.id_premiacao)
                     itemFilme.premiacao = dadosPremiacao.premiacao
                     delete itemFilme.id_premiacao
@@ -131,6 +131,7 @@ const listarTipoPremicao = async function () {
             return message.ERROR_INTERNAL_SERVER_MODEL //500
         }
     } catch (error) {
+        console.error(error)
         return message.ERROR_INTERNAL_SERVER_CONTROLLER //500
     }
 }

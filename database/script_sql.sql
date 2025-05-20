@@ -30,11 +30,6 @@ create table tbl_nacionalidade(
     nacionalidade varchar(50) not null
 );
 
-create table tbl_tipo_premiacao(
-    id_tipo_premiacao int not null primary key auto_increment,
-    tipo_premiacao varchar(100) not null
-);
-
 create table tbl_genero(
     id_genero int not null primary key auto_increment,
     genero varchar(50) not null
@@ -103,6 +98,52 @@ create table tbl_premiacao(
     nome_premiacao varchar(100) not null
 );
 
+create table tbl_tipo_premiacao(
+    id_tipo_premiacao int not null primary key auto_increment,
+    tipo_premiacao varchar(100) not null,
+    id_premiacao int not null,
+
+    constraint FK_PREMIACAO_TIPO_PREMIACAO
+    foreign key (id_premiacao)
+    references tbl_premiacao(id_premiacao)
+);
+
+create table tbl_filme_tipo_premiacao(
+    id_filme_tipo_premiacao int not null primary key auto_increment,
+    id_filme int not null,
+    id_tipo_premiacao int not null,
+
+    constraint FK_TIPO_PREMIACAO_FILME_TIPO_PREMIACAO
+    foreign key (id_tipo_premiacao)
+    references tbl_tipo_premiacao(id_tipo_premiacao),
+
+    constraint FK_FILME_FILME_TIPO_PREMIACAO
+    foreign key (id_filme) 
+    references tbl_filme(id)
+);
+
+create table tbl_ator(
+    id_ator int not null primary key auto_increment,
+    nome varchar(100) not null,
+    idade varchar(100) not null,
+    id_sexo int not null,
+
+    constraint FK_SEXO_ATOR
+    foreign key (id_sexo)
+    references tbl_sexo(id_sexo)
+);
+
+create table tbl_diretor(
+    id_diretor int not null primary key auto_increment,
+    nome varchar(100) not null,
+    idade varchar(100) not null,
+    id_sexo int not null,
+
+    constraint FK_SEXO_DIRETOR
+    foreign key (id_sexo)
+    references tbl_sexo(id_sexo)
+);
+
 show tables;
 
 desc tbl_filme;
@@ -121,3 +162,8 @@ ADD id_premiacao INT,
 ADD CONSTRAINT FK_PREMIACAO_TIPOPREMIACAO
     FOREIGN KEY (id_premiacao)
     REFERENCES tbl_premiacao(id_premiacao);
+
+
+DROP TABLE tbl_premiacao;
+ALTER TABLE tbl_tipo_premiacao DROP FOREIGN KEY FK_PREMIACAO_TIPOPREMIACAO;
+DROP TABLE tbl_tipo_premiacao;

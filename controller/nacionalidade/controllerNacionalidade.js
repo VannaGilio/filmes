@@ -1,7 +1,7 @@
 //Import do arquivo dee mensagens e status code do projeto
 const message = require('../../modulo/config')
 
-const nacionalidadeDAO = require('../../model/DAO/nacionalidade')
+const nacionalidadeDAO = require('../../model/DAO/nacionalidade/nacionalidade.js')
 
 const inserirNacionalidade = async function (nacionalidade, contentType) {
     try {

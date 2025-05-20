@@ -70,7 +70,7 @@ const excluirSexo = async function (id) {
         } else {
 
             //função que verifica se ID existe no BD
-            let resultSexo = await sexoDAO.selectAllSexo(parseInt(id))
+            let resultSexo = await sexoDAO.selectByIdSexo(parseInt(id))
 
             if (resultSexo != false || typeof (resultSexo) == 'object') {
                 //se exestir, faremos o delete

@@ -410,6 +410,22 @@ app.get('/v1/controle-filmes/premiacao', cors(), bodyParserJSON, async function(
     response.json(resultPremiacao)
 })
 
+const controllerAtor = require('./controller/ator/controllerAtor.js')
+app.post('/v1/controle-filmes/ator', cors(), bodyParserJSON, async function(request, response) {
+    let dadosBody = request.body
+    let contentType = request.headers['content-type']
+    let resultAtor = await controllerAtor.inserirAtor(dadosBody, contentType)
+
+    response.status(resultAtor.status_code)
+    response.json(resultAtor)
+})
+app.get('/v1/controle-filmes/ator', cors(), bodyParserJSON, async function(request, response) {
+    let resultAtor = await controllerAtor.listarAtor()
+
+    response.status(resultAtor.status_code)
+    response.json(resultAtor)
+})
+
 app.listen('3030', function(){
     console.log('API funcionando...')
 })

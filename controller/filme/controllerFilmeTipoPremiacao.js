@@ -1,21 +1,22 @@
 //Import do arquivo dee mensagens e status code do projeto
 const message = require('../../modulo/config.js')
 
-const filmePlataformaDAO = require('../../model/DAO/filme/filme_plataforma.js')
+const filmeTipoPremiacaoDAO = require('../../model/DAO/filme/filme_tipo_premiacao.js')
 
-const inserirFilmePlataforma = async function (filmePlataforma, contentType) {
+const inserirFilmeTipoPremiacao = async function (filmeTipoPremiacao, contentType) {
     try {
         if (String(contentType).toLowerCase() == 'application/json') {
             if (
-                filmePlataforma.id_filme == '' || filmePlataforma.id_filme == undefined || filmePlataforma.id_filme == null || isNaN(filmePlataforma.id_filme) || filmePlataforma.id_filme <= 0 ||
-                filmePlataforma.id_plataforma == '' || filmePlataforma.id_plataforma == undefined || filmePlataforma.id_plataforma == null || isNaN(filmePlataforma.id_plataforma) || filmePlataforma.id_plataforma <= 0
+                filmeTipoPremiacao.id_filme == '' || filmeTipoPremiacao.id_filme == undefined || filmeTipoPremiacao.id_filme == null || isNaN(filmeTipoPremiacao.id_filme) || filmeTipoPremiacao.id_filme <= 0 ||
+                filmeTipoPremiacao.id_tipo_premiacao == '' || filmeTipoPremiacao.id_tipo_premiacao == undefined || filmeTipoPremiacao.id_tipo_premiacao == null ||
+                isNaN(filmeTipoPremiacao.id_tipo_premiacao) || filmeTipoPremiacao.id_tipo_premiacao <= 0
             ) {
                 return message.ERROR_REQUIRED_FIELDS //400
             } else {
                 //Chama a função para inserir no BD e aguarda o retorno da função
-                let resultPlataforma = await filmePlataformaDAO.insertFilmePlataforma(filmePlataforma)
+                let retultTipoPremiacao = await filmeTipoPremiacaoDAO.insertFilmeTipoPremiacao(filmeTipoPremiacao)
 
-                if (resultPlataforma)
+                if (retultTipoPremiacao)
                     return message.SUCCESS_CREATED_ITEM //201
                 else
                     return message.ERROR_INTERNAL_SERVER_MODEL //500
@@ -28,25 +29,26 @@ const inserirFilmePlataforma = async function (filmePlataforma, contentType) {
     }
 }
 
-const atualizarFilmePlataforma = async function (id, filmePlataforma, contentType) {
+const atualizarFilmeTipoPremiacao = async function (id, filmeTipoPremiacao, contentType) {
     try {
         if (String(contentType).toLowerCase() == 'application/json') {
             if (id == '' || id == undefined || id == null || isNaN(id) || id <= 0 ||
-                filmePlataforma.id_filme == '' || filmePlataforma.id_filme == undefined || filmePlataforma.id_filme == null || isNaN(filmePlataforma.id_filme) || filmePlataforma.id <= 0 ||
-                filmePlataforma.id_plataforma == '' || filmePlataforma.id_plataforma == undefined || filmePlataforma.id_plataforma == null || isNaN(filmePlataforma.id_plataforma) || filmePlataforma.id_plataforma <= 0
+                filmeTipoPremiacao.id_filme == '' || filmeTipoPremiacao.id_filme == undefined || filmeTipoPremiacao.id_filme == null || isNaN(filmeTipoPremiacao.id_filme) || filmeTipoPremiacao.id <= 0 ||
+                filmeTipoPremiacao.id_tipo_premiacao == '' || filmeTipoPremiacao.id_tipo_premiacao == undefined || filmeTipoPremiacao.id_tipo_premiacao == null ||
+                isNaN(filmeTipoPremiacao.id_tipo_premiacao) || filmeTipoPremiacao.id_tipo_premiacao <= 0
             ) {
                 return message.ERROR_REQUIRED_FIELDS //400
             } else {
                 //Validação para verificar se o ID existe no BD
-                let resultPlataforma = await filmePlataformaDAO.selectByIdFilmePlataforma(parseInt(id))
+                let resultTipoPremicao = await filmeTipoPremiacaoDAO.selectByIdFilmeTipoPremiacao(parseInt(id))
 
-                if (resultPlataforma != false || typeof (resultPlataforma) == 'object') {
-                    if (resultPlataforma.length > 0) {
+                if (resultTipoPremicao != false || typeof (resultTipoPremicao) == 'object') {
+                    if (resultTipoPremicao.length > 0) {
                         //Update
                         //Adiciona o ID do genero no JSON com os dados
-                        plataforma.id_plataforma = parseInt(id)
+                        tipo_premiacao.id_tipo_premiacao = parseInt(id)
 
-                        let result = await filmePlataformaDAO.updateFilmePlataforma(filmePlataforma)
+                        let result = await filmeTipoPremiacaoDAO.updateFilmeTipoPremiacao(filmeTipoPremiacao)
 
                         if (result) {
                             return message.SUCCESS_UPDATED_ITEM //200
@@ -67,20 +69,20 @@ const atualizarFilmePlataforma = async function (id, filmePlataforma, contentTyp
         return message.ERROR_INTERNAL_SERVER_CONTROLLER //500
     }
 }
-const excluirFilmePlataforma = async function (id) {
+const excluirFilmeTipoPremiacao = async function (id) {
     try {
         if (id == '' || id == undefined || id == null || isNaN(id) || id <= 0) {
             return message.ERROR_REQUIRED_FIELDS //400
         } else {
 
             //Funcção que verifica se  ID existe no BD
-            let resultPlataforma = await filmePlataformaDAO.selectByIdFilmePlataforma(parseInt(id))
+            let resultTipoPremiacao = await filmeTipoPremiacaoDAO.selectByIdFilmeTipoPremiacao(parseInt(id))
 
-            if (resultPlataforma != false || typeof (resultPlataforma) == 'object') {
+            if (resultTipoPremiacao != false || typeof (resultTipoPremiacao) == 'object') {
                 //Se existir, faremos o delete
-                if (resultPlataforma.length > 0) {
+                if (resultTipoPremiacao.length > 0) {
                     //delete
-                    let result = await filmePlataformaDAO.deleteFilmePlataforma(parseInt(id))
+                    let result = await filmeTipoPremiacaoDAO.deleteFilmeTipoPremiacao(parseInt(id))
 
                     if (result) {
                         return message.SUCCESS_DELETED_ITEM //200
@@ -99,20 +101,20 @@ const excluirFilmePlataforma = async function (id) {
     }
 }
 
-const listarFilmePlataforma = async function () {
+const listarFilmeTipoPremiacao = async function () {
     try {
-        let dadosPlataforma = {}
-        let resultPlataforma = await filmePlataformaDAO.selectAllFilmePlataforma()
+        let dadosPremiacao = {}
+        let resultPremiacao = await filmeTipoPremiacaoDAO.selectAllFilmeTipoPremiacao()
 
-        if (resultPlataforma != false || typeof (resultPlataforma) == 'object') {
-            if (resultPlataforma.length > 0) {
+        if (resultPremiacao != false || typeof (resultPremiacao) == 'object') {
+            if (resultPremiacao.length > 0) {
 
-                dadosPlataforma.status = true
-                dadosPlataforma.status_code = 200
-                dadosPlataforma.items = resultPlataforma.length
-                dadosPlataforma.films = resultPlataforma
+                dadosPremiacao.status = true
+                dadosPremiacao.status_code = 200
+                dadosPremiacao.items = resultPremiacao.length
+                dadosPremiacao.films = resultPremiacao
 
-                return dadosPlataforma
+                return dadosPremiacao
             } else {
                 return message.ERROR_NOT_FOUND //404
             }
@@ -124,23 +126,23 @@ const listarFilmePlataforma = async function () {
     }
 }
 
-const buscarFilmePlataforma = async function (id) {
+const buscarFilmeTipoPremiacao = async function (id) {
     try {
         if (id == '' || id == undefined || id == null || isNaN(id) || id <= 0) {
             return message.ERROR_REQUIRED_FIELDS //400
         } else {
-            let dadosPlataforma = {}
+            let dadosTipoPremiacao = {}
 
-            let resultPlataforma = await filmePlataformaDAO.selectByIdFilmePlataforma(parseInt(id))
+            let resultTipoPremiacao = await filmeTipoPremiacaoDAO.selectByIdFilmeTipoPremiacao(parseInt(id))
 
-            if (resultPlataforma != false || typeof (resultPlataforma) == 'object') {
-                if (resultPlataforma.length > 0) {
-                    //Criando um JSON de retorno de dados para a API
-                    dadosPlataforma.status = true
-                    dadosPlataforma.status_code = 200
-                    dadosPlataforma.plataforma = resultPlataforma
+            if (resultTipoPremiacao != false || typeof (resultTipoPremiacao) == 'object') {
+                if (resultTipoPremiacao.length > 0) {
 
-                    return dadosPlataforma //200
+                    dadosTipoPremiacao.status = true
+                    dadosTipoPremiacao.status_code = 200
+                    dadosTipoPremiacao.tipoPremiacao = resultTipoPremiacao
+
+                    return dadosTipoPremiacao //200
                 } else {
                     return message.ERROR_NOT_FOUND //404
                 }
@@ -154,23 +156,23 @@ const buscarFilmePlataforma = async function (id) {
     }
 }
 
-const buscarPlataformaPorFilme = async function (id) {
+const buscarTipoPremiacaoPorFilme = async function (id) {
     try {
         if (id == '' || id == undefined || id == null || isNaN(id) || id <= 0) {
             return message.ERROR_REQUIRED_FIELDS //400
         } else {
-            let dadosPlataforma = {}
+            let dadosPremiacao = {}
 
-            let resultPlataforma = await filmePlataformaDAO.selectPlataformaByIdFilme(parseInt(id))
+            let resultPremiacao = await filmeTipoPremiacaoDAO.selectTipoPremiacaoByIdFilme(parseInt(id))
 
-            if (resultPlataforma != false || typeof (resultPlataforma) == 'object') {
-                if (resultPlataforma.length > 0) {
+            if (resultPremiacao != false || typeof (resultPremiacao) == 'object') {
+                if (resultPremiacao.length > 0) {
                     //Criando um JSON de retorno de dados para a API
-                    dadosPlataforma.status = true
-                    dadosPlataforma.status_code = 200
-                    dadosPlataforma.plataforma = resultPlataforma
+                    dadosPremiacao.status = true
+                    dadosPremiacao.status_code = 200
+                    dadosPremiacao.premiacao = resultPremiacao
 
-                    return dadosPlataforma //200
+                    return dadosPremiacao //200
                 } else {
                     return message.ERROR_NOT_FOUND //404
                 }
@@ -183,24 +185,23 @@ const buscarPlataformaPorFilme = async function (id) {
     }
 }
 
-const buscarFilmePorPlataforma = async function (id) {
+const buscarFilmePorTipoPremiacao = async function (id) {
     try {
         if (id == '' || id == undefined || id == null || isNaN(id) || id <= 0) {
             return message.ERROR_REQUIRED_FIELDS //400
         } else {
             let dadosFilme = {}
 
-            let resultPlataforma = await filmePlataformaDAO.selectFilmeByIdPlataforma(parseInt(id))
+            let resultTipoPremiacao = await filmeTipoPremiacaoDAO.selectFilmeByIdTipoPremiacao(parseInt(id))
 
-            if (resultPlataforma != false || typeof (resultPlataforma) == 'object') {
-                if (resultPlataforma.length > 0) {
+            if (resultTipoPremiacao != false || typeof (resultTipoPremiacao) == 'object') {
+                if (resultTipoPremiacao.length > 0) {
                     //Criando um JSON de retorno de dados para a API
                     dadosFilme.status = true
                     dadosFilme.status_code = 200
-                    dadosPlataforma.plataforma = resultPlataforma
+                    dadosFilme.tipoPremiacao = resultTipoPremiacao
 
-
-                    return dadosFilme //200
+                    return dadosFilme //201
                 } else {
                     return message.ERROR_NOT_FOUND //404
                 }
@@ -215,11 +216,11 @@ const buscarFilmePorPlataforma = async function (id) {
 }
 
 module.exports = {
-    inserirFilmePlataforma,
-    atualizarFilmePlataforma,
-    excluirFilmePlataforma,
-    listarFilmePlataforma,
-    buscarFilmePlataforma,
-    buscarFilmePorPlataforma,
-    buscarPlataformaPorFilme
+    inserirFilmeTipoPremiacao,
+    atualizarFilmeTipoPremiacao,
+    excluirFilmeTipoPremiacao,
+    listarFilmeTipoPremiacao,
+    buscarFilmeTipoPremiacao,
+    buscarTipoPremiacaoPorFilme,
+    buscarFilmePorTipoPremiacao
 } 
