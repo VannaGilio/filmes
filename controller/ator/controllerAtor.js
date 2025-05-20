@@ -1,5 +1,7 @@
 const atorDAO = require('../../model/DAO/ator.js')
+const nacionalidadeAtorDAO = require('../../model/DAO/nacionalidade/nacionalidade_ator.js')
 const controllerSexo = require('../sexo/controllerSexo.js')
+const controllerNacionalidadeAtor = require('../nacionalidade/controllerNacionalidadeAtor.js')
 const message = require('../../modulo/config.js')
 
 const inserirAtor = async function (ator, contentType) {
@@ -14,6 +16,21 @@ const inserirAtor = async function (ator, contentType) {
                 let resultAtor = await atorDAO.insertAtor(ator)
 
                 if (resultAtor) {
+                    if (ator.nacionalidade && Array.isArray(ator.nacionalidade)) {
+                        let atorInserido = await atorDAO.selectLastIdAtor()
+                        let idAtor = atorInserido[0].id_ator
+
+                        for (let nacionalidade of ator.nacionalidade) {
+                            if (nacionalidade.id_nacionalidade && !isNaN(nacionalidade.id_nacionalidade)) {
+                                let nacionalidadeAtor = {
+                                    id_ator: idAtor,
+                                    id_nacionalidade: nacionalidade.id_nacionalidade
+                                }
+                                await nacionalidadeAtorDAO.insertNacionalidadeAtor(nacionalidadeAtor)
+                            }
+                        }
+                    }
+
                     return message.SUCCESS_CREATED_ITEM //201
                 } else
                     return message.ERROR_INTERNAL_SERVER_MODEL //500
@@ -22,6 +39,7 @@ const inserirAtor = async function (ator, contentType) {
             return message.ERROR_CONTENT_TYPE //415
         }
     } catch (error) {
+        console.error(error)
         return message.ERROR_INTERNAL_SERVER_CONTROLLER //500
     }
 }
@@ -103,15 +121,18 @@ const listarAtor = async function () {
                 dadosAtor.items = resultAtor.length
                 dadosAtor.sexo = resultAtor
 
-                for (const itemFilme of resultAtor) {
+                for (const itemAtor of resultAtor) {
 
-                    let dadosSexo = await controllerSexo.buscarSexo(itemFilme.id_sexo)
+                    let dadosSexo = await controllerSexo.buscarSexo(itemAtor.id_sexo)
+                    itemAtor.sexo = dadosSexo.sexo
+                    delete itemAtor.id_sexo
 
-                    itemFilme.sexo = dadosSexo.sexo
-                    delete itemFilme.id_sexo
+                    let dadosNacionalidade = await controllerNacionalidadeAtor.buscarNacionalidadePorAtor(itemAtor.id_ator)
+                    itemAtor.nacionalidade = dadosNacionalidade.nacionalidade
 
-                    arrayFilmes.push(itemFilme)
+                    arrayFilmes.push(itemAtor)
                 }
+
                 return dadosAtor
             } else {
                 return message.ERROR_NOT_FOUND //404
@@ -138,14 +159,16 @@ const buscarAtor = async function (id) {
                     dadosAtor.status_code = 200
                     dadosAtor.ator = resultAtor
 
-                    for (const itemFilme of resultAtor) {
+                    for (const itemAtor of resultAtor) {
 
-                        let dadosSexo = await controllerSexo.buscarSexo(itemFilme.id_sexo)
+                        let dadosSexo = await controllerSexo.buscarSexo(itemAtor.id_sexo)
+                        itemAtor.sexo = dadosSexo.sexo
+                        delete itemAtor.id_sexo
 
-                        itemFilme.sexo = dadosSexo.sexo
-                        delete itemFilme.id_sexo
+                        let dadosNacionalidade = await controllerNacionalidadeAtor.buscarNacionalidadePorAtor(itemAtor.id_ator)
+                        itemAtor.nacionalidade = dadosNacionalidade.nacionalidade
 
-                        arrayFilmes.push(itemFilme)
+                        arrayFilmes.push(itemAtor)
                     }
 
                     dadosAtor.films = arrayFilmes

@@ -125,14 +125,14 @@ const selectByIdFilme = async function (id) {
 
 const selectLastId = async function() {
     try {
-        let sql = 'select id from tbl_filme order by id desc limit 1';
-        let result = await prisma.$queryRawUnsafe(sql);
+        let sql = 'select id from tbl_filme order by id desc limit 1'
+        let result = await prisma.$queryRawUnsafe(sql)
         if (result)
-            return result;
+            return result
         else
-            return false;
+            return false
     } catch (error) {
-        return false;
+        return false
     }
 }
 

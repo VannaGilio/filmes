@@ -425,6 +425,13 @@ app.get('/v1/controle-filmes/ator', cors(), bodyParserJSON, async function(reque
     response.status(resultAtor.status_code)
     response.json(resultAtor)
 })
+app.delete('/v1/controle-filmes/ator/:id', cors(), bodyParserJSON, async function(request, response) {
+    let idNacionalidadeAtor = request.params.id
+    let resultNacionalidadeAtor = await controllerAtor.excluirAtor(idNacionalidadeAtor)
+
+    response.status(resultNacionalidadeAtor.status_code)
+    response.json(resultNacionalidadeAtor)
+})
 
 app.listen('3030', function(){
     console.log('API funcionando...')

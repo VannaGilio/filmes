@@ -92,11 +92,24 @@ const selectByIdAtor = async function(id){
       return false
     }
 }
+const selectLastIdAtor = async function() {
+    try {
+        let sql = 'select id_ator from tbl_ator order by id_ator desc limit 1'
+        let result = await prisma.$queryRawUnsafe(sql)
+        if (result)
+            return result
+        else
+            return false
+    } catch (error) {
+        return false
+    }
+}
 
 module.exports = {
   insertAtor,
   deleteAtor,
   updateAtor,
   selectAllAtor,
-  selectByIdAtor
+  selectByIdAtor,
+  selectLastIdAtor
 } 

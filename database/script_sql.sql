@@ -144,6 +144,21 @@ create table tbl_diretor(
     references tbl_sexo(id_sexo)
 );
 
+create table tbl_nacionalidade_ator(
+    id_nacionalidade_ator int not null primary key auto_increment,
+    id_ator int not null,
+    id_nacionalidade int not null,
+
+    constraint FK_ATOR_NACIONALIDADE_ATOR
+    foreign key (id_ator)
+    references tbl_ator(id_ator),
+
+    constraint FK_NACIONALIDADE_NACIONALIDADE_ATOR
+    foreign key (id_nacionalidade) 
+    references tbl_nacionalidade(id_nacionalidade)
+);
+
+
 show tables;
 
 desc tbl_filme;
