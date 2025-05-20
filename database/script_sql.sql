@@ -172,6 +172,16 @@ create table tbl_filme_ator(
     references tbl_filme(id)
 );
 
+create table tbl_editora(
+    id_editora int not null primary key auto_increment,
+    nome varchar(100) not null,
+    id_nacionalidade int not null,
+
+    constraint FK_NACIONALIDADE_EDITORA
+    foreign key (id_nacionalidade)
+    references tbl_nacionalidade(id_nacionalidade)
+);
+
 show tables;
 
 desc tbl_filme;
